@@ -115,8 +115,8 @@ void RobotContainer::TurbyStick::Execute() {
   // testing only
   static bool setPos = false, hold = false;
   double x = joy.GetLeftX(), y = joy.GetRightX();
-  if (joy.GetAButtonPressed()) setPos = ! setPos;
-  if (joy.GetRightStickButtonPressed()) hold = ! hold;
+  //if (joy.GetAButtonPressed()) setPos = ! setPos;
+  //if (joy.GetLeftStickButtonPressed()) hold = ! hold;
   if (setPos) {
     x *= 90; y *= 90;
     it.SetAngles(x, y, 0);
@@ -127,10 +127,21 @@ void RobotContainer::TurbyStick::Execute() {
   }
   else {
     x /= 10; y /= 10;
-    it.SetMotors(x, y, 0);
-    if (! hold) {
-      frc::SmartDashboard::PutNumber("stage 1 power:", x);
-      frc::SmartDashboard::PutNumber("stage 2 power:", y);
+    if (joy.GetXButton()){
+      it.SetMotors(x, 0, 0);
+      if (! hold) 
+        frc::SmartDashboard::PutNumber("stage 1 power:", x);
+    }    
+    else if (joy.GetYButton()){
+      it.SetMotors(0, x, 0);
+      if (! hold) 
+        frc::SmartDashboard::PutNumber("stage 2 power:", x);
+    }    
+    else if (joy.GetBButton()){
+      it.SetMotors(0, 0, x);
+      if (! hold) 
+        frc::SmartDashboard::PutNumber("stage 3 power:", x);
     }
+    else it.SetMotors(0, 0, 0); 
   }
 }
