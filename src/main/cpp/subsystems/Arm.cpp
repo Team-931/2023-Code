@@ -62,8 +62,8 @@ void Arm::Periodic() {
 
 void Arm::SetAngles(double deg1, double deg2, double deg3) {
   deg1 /= 360; deg2 /= 360; deg3 /= 360;
-  double g3 = 0 /* gravCompensator * momentStage2 * sin (2*pi*(deg3 - nAngleStage2)) */;//fix this
-  double g2 = gravCompensator * momentStage2 * sin (2*pi*(deg2 - nAngleStage2));
+  double g3 = gravCompensator * momentStage3 * sin (2*pi*(deg3 - nAngleStage3));//fix this
+  double g2 = gravCompensator * momentStage2 * sin (2*pi*(deg2 - nAngleStage2)) + g3;
   double g1 = gravCompensator * momentStage1 * sin (2*pi*(deg1 - nAngleStage1)) + g2;
   stage1.Set(ControlMode::MotionMagic, deg1 * ticksPerRotation * gear1to2,
     DemandType::DemandType_ArbitraryFeedForward, g1 / gear1to2);
