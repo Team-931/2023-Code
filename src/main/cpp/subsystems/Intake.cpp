@@ -14,7 +14,7 @@ Intake::Intake()
 }
 
 void Intake::Periodic() {
-    wheels.Set(whpow*deployed);
+    wheels.Set(whpow * (int) deployed);
 }
 
 void Intake::SetDeployed(IntakeState d) { deployed = d; }

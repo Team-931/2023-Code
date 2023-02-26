@@ -94,16 +94,17 @@ struct DrvbyStick
       frc::SmartDashboard::PutBoolean("intake_deployed", intake_deployed);
 
       // Operator Inputs
-      bool intake_deploy = joy.GetRightBumper();
-      bool intake_raise = joy.GetLeftBumper();
+      bool intake_cone = joy.GetRightBumper();
+      bool intake_cube = joy.GetLeftBumper();
 
       // State update logic
-      if (intake_deploy && !intake_raise) {
+      if (intake_cone && !intake_cube) {
         intake_deployed = ConeIn;
       }
-      if (intake_raise && !intake_deploy) {
+      else if (intake_cube && !intake_cone) {
         intake_deployed = CubeIn;
       }
+      else intake_deployed = Stop;
 
       // Control robot
       it.SetDeployed(intake_deployed);

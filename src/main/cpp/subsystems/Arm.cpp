@@ -20,7 +20,7 @@ Arm::Arm()
       stage3(stage3Id) {
   //stage1.Follow(stage2);
   stage1.SetInverted(TalonFXInvertType::Clockwise);
-  stage2.SetInverted(TalonFXInvertType::Clockwise);
+  stage2.SetInverted(TalonFXInvertType::CounterClockwise);
   stage3.SetInverted(TalonFXInvertType::Clockwise);
   stage1.SetNeutralMode(Brake);
   stage2.SetNeutralMode(Brake);
@@ -37,6 +37,9 @@ Arm::Arm()
   stage3.Config_kF(0, CtlF);
   stage3.ConfigMotionCruiseVelocity(maxVel);
   stage3.ConfigMotionAcceleration(maxAccel);
+  stage1.SetSelectedSensorPosition(initialCorrections[0]);
+  stage2.SetSelectedSensorPosition(initialCorrections[1]);
+  stage2.SetSelectedSensorPosition(initialCorrections[2]);
   stage1.ConfigReverseSoftLimitThreshold(minDegrees[0]);
   stage1.ConfigReverseSoftLimitEnable(true);
   stage2.ConfigReverseSoftLimitThreshold(minDegrees[1]);
@@ -66,6 +69,6 @@ void Arm::SetAngles(double deg1, double deg2, double deg3) {
     DemandType::DemandType_ArbitraryFeedForward, g1 / gear1to2);
   stage2.Set(ControlMode::MotionMagic, (deg1 + deg2) * ticksPerRotation, 
     DemandType::DemandType_ArbitraryFeedForward, -g2);
-  stage3.Set(ControlMode::MotionMagic, (deg1 + deg2 + deg3) * ticksPerRotation, 
+  stage3.Set(ControlMode::MotionMagic, (deg2 + deg3) * ticksPerRotation, 
     DemandType::DemandType_ArbitraryFeedForward, g3);
 }

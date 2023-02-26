@@ -126,7 +126,7 @@ void RobotContainer::TurbyStick::Execute() {
     }
   }
   else {
-    x /= 10; y /= 10;
+    x /= 2; y /= 10;
     if (joy.GetXButton()){
       it.SetMotors(x, 0, 0);
       if (! hold) 
