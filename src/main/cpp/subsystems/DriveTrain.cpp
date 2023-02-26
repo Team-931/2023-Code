@@ -15,6 +15,7 @@ using namespace Constants::DriveTrain;
 DriveTrain::DriveTrain() {
   // Implementation of subsystem constructor goes here.
   SetName("drive train");
+  symph.LoadMusic("startup.chrp");
 }
 
 void DriveTrain::SetV(double linX, double linY, double rot, double throttle,
@@ -46,7 +47,7 @@ void DriveTrain::Periodic() {
 void DriveTrain::SimulationPeriodic() {
   // Implementation of subsystem simulation periodic method goes here.
 }
-
+Orchestra symph;
 int SwerveModule::ix = 0;
 
 SwerveModule::SwerveModule()
@@ -72,6 +73,8 @@ SwerveModule::SwerveModule()
   drive.SetNeutralMode(NeutralMode::Brake);
   drive.ConfigOpenloopRamp(0);//ask how much
   drive.ConfigClosedloopRamp(.5);//ask how much
+  symph.AddInstrument(turn);
+  symph.AddInstrument(drive);
 }
 
 double SwerveModule::SetV(double linX, double linY, double rot) {
@@ -114,6 +117,7 @@ void SwerveModule::Periodic() {
 }
 void DriveTrain::Init() {
   for (auto& wheel : wheels) wheel.Init();
+  symph.Play();
 }
 
 void SwerveModule::Init() {
