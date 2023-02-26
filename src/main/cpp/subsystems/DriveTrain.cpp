@@ -11,6 +11,7 @@
 
 #include "Constants.h"
 using namespace Constants::DriveTrain;
+Orchestra symph;
 
 DriveTrain::DriveTrain() {
   // Implementation of subsystem constructor goes here.
@@ -47,7 +48,6 @@ void DriveTrain::Periodic() {
 void DriveTrain::SimulationPeriodic() {
   // Implementation of subsystem simulation periodic method goes here.
 }
-Orchestra symph;
 int SwerveModule::ix = 0;
 
 SwerveModule::SwerveModule()
