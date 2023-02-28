@@ -1,84 +1,114 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
-#include "Robot.h"
-
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/CommandScheduler.h>
 
-void Robot::RobotInit() {}
+#include "Robot.h"
 
-/**
- * This function is called every 20 ms, no matter the mode. Use
- * this for items like diagnostics that you want to run during disabled,
- * autonomous, teleoperated and test.
- *
- * <p> This runs after the mode specific periodic functions, but before
- * LiveWindow and SmartDashboard integrated updating.
- */
-void Robot::RobotPeriodic() { frc2::CommandScheduler::GetInstance().Run(); }
-
-/**
- * This function is called once each time the robot enters Disabled mode. You
- * can use it to reset any subsystem information you want to clear when the
- * robot is disabled.
- */
-void Robot::DisabledInit() {}
-
-void Robot::DisabledPeriodic() {}
-
-/**
- * This autonomous runs the autonomous command selected by your {@link
- * RobotContainer} class.
- */
-void Robot::AutonomousInit() {
-  m_autonomousCommand = m_container.GetAutonomousCommand();
-
-  if (m_autonomousCommand != nullptr) {
-    m_autonomousCommand->Schedule();
-  }
-
-  m_container.Init();  // setting the encoders based on absolute readings: does
-                       // it work here?
-}
-
-void Robot::AutonomousPeriodic() {}
-
-void Robot::TeleopInit() {
-  // This makes sure that the autonomous stops running when
-  // teleop starts running. If you want the autonomous to
-  // continue until interrupted by another command, remove
-  // this line or comment it out.
-  if (m_autonomousCommand != nullptr) {
-    m_autonomousCommand->Cancel();
-    m_autonomousCommand = nullptr;
-  }
-
-  m_container.Init();  // setting the encoders based on absolute readings: does
-                       // it work here?
+void Robot::RobotInit()
+{
 }
 
 /**
- * This function is called periodically during operator control.
+ * This function is called periodically regardless of the mode that is running
  */
-void Robot::TeleopPeriodic() {}
+void Robot::RobotPeriodic()
+{
+    frc2::CommandScheduler::GetInstance().Run();
+}
 
 /**
- * This function is called periodically during test mode.
+ * Called once when the robot becomes disabled
  */
-void Robot::TestPeriodic() {}
+void Robot::DisabledInit()
+{
+}
 
 /**
- * This function is called once when the robot is first started up.
+ * Called periodically while the robot is disabled
  */
-void Robot::SimulationInit() {}
+void Robot::DisabledPeriodic()
+{
+}
 
 /**
- * This function is called periodically whilst in simulation.
+ * Called once when an autonomous routine is started
  */
-void Robot::SimulationPeriodic() {}
+void Robot::AutonomousInit()
+{
+    m_autonomousCommand = m_container.GetAutonomousCommand();
+
+    if (m_autonomousCommand != nullptr)
+    {
+        m_autonomousCommand->Schedule();
+    }
+
+    m_container.Init(); // setting the encoders based on absolute readings: does
+                        // it work here?
+}
+
+/**
+ * Called periodically while the robot is in autonomous
+ */
+void Robot::AutonomousPeriodic()
+{
+}
+
+/**
+ * Called periodically while the robot is in teleop
+ */
+void Robot::TeleopInit()
+{
+    // This makes sure that the autonomous stops running when
+    // teleop starts running. If you want the autonomous to
+    // continue until interrupted by another command, remove
+    // this line or comment it out.
+    if (m_autonomousCommand != nullptr)
+    {
+        m_autonomousCommand->Cancel();
+        m_autonomousCommand = nullptr;
+    }
+
+    m_container.Init(); // setting the encoders based on absolute readings: does
+                        // it work here?
+}
+
+/**
+ * Called periodically while the robot is in teleop
+ */
+void Robot::TeleopPeriodic()
+{
+}
+
+/**
+ * Called once when test mode is started
+ */
+void Robot::TestInit()
+{
+}
+
+/**
+ * Called periodically while the robot is in test mode
+ */
+void Robot::TestPeriodic()
+{
+}
+
+/**
+ * Called once when simulation mode is started
+ */
+void Robot::SimulationInit()
+{
+}
+
+/**
+ * Called periodically while the robot is in simulation mode
+ */
+void Robot::SimulationPeriodic()
+{
+}
 
 #ifndef RUNNING_FRC_TESTS
-int main() { return frc::StartRobot<Robot>(); }
+int main()
+{
+    return frc::StartRobot<Robot>();
+}
 #endif
