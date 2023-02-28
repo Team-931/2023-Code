@@ -1,5 +1,3 @@
-.vscode/settings.json
-
 # This gitignore has been specially created by the WPILib team.
 # If you remove items from this file, intellisense might break.
 
@@ -162,3 +160,4 @@ bin/
 
 # Simulation GUI and other tools window save file
 *-window.json
+.vscode/settings.json
