@@ -26,13 +26,27 @@ void RobotContainer::Init() {
   if (frc::DriverStation::GetJoystickIsXbox(0)) XBox = true;
 }
 
+class testarmraise : public frc2::CommandHelper<frc2::CommandBase, testarmraise> {
+  public:
+   testarmraise (Arm& a) : arm(a) {
+    AddRequirements (&a);
+   }
+   void Initialize() override {
+    arm.SetAngles(25, 14, 330);
+   }
+
+  private:
+   Arm& arm;
+};
+
 void RobotContainer::ConfigureButtonBindings() {
   // Configure your button bindings here
+  
 }
 
 frc2::Command* RobotContainer::GetAutonomousCommand() {
   // An example command will be run in autonomous
-  //if(1) return new autoaim(arm, ballevator);
+  if(1) return new testarmraise(arm);
   return &m_autonomousCommand;
 }
 
@@ -117,31 +131,28 @@ void RobotContainer::TurbyStick::Execute() {
   double x = joy.GetLeftX(), y = joy.GetRightX();
   //if (joy.GetAButtonPressed()) setPos = ! setPos;
   //if (joy.GetLeftStickButtonPressed()) hold = ! hold;
-  if (setPos) {
-    x *= 90; y *= 90;
-    it.SetAngles(x, y, 0);
-    if (! hold) {
-      frc::SmartDashboard::PutNumber("stage 1 angle:", x);
-      frc::SmartDashboard::PutNumber("stage 2 angle:", y);
-    }
+  if (joy.GetAButtonPressed()) {
+    it.SetAngles(25, 14, 330);
+    setPos = true;
   }
-  else {
     x /= 2; y /= 10;
     if (joy.GetXButton()){
       it.SetMotors(x, 0, 0);
+      setPos = false;
       if (! hold) 
         frc::SmartDashboard::PutNumber("stage 1 power:", x);
     }    
     else if (joy.GetYButton()){
       it.SetMotors(0, x, 0);
+      setPos = false;
       if (! hold) 
         frc::SmartDashboard::PutNumber("stage 2 power:", x);
     }    
     else if (joy.GetBButton()){
       it.SetMotors(0, 0, x);
+      setPos = false;
       if (! hold) 
         frc::SmartDashboard::PutNumber("stage 3 power:", x);
     }
-    else it.SetMotors(0, 0, 0); 
-  }
+    else if (setPos == false) it.SetMotors(0, 0, 0);
 }

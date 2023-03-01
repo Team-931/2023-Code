@@ -98,13 +98,12 @@ struct DrvbyStick
       bool intake_cube = joy.GetLeftBumper();
 
       // State update logic
-      if (intake_cone && !intake_cube) {
-        intake_deployed = ConeIn;
-      }
-      else if (intake_cube && !intake_cone) {
-        intake_deployed = CubeIn;
-      }
-      else intake_deployed = Stop;
+      if (intake_cone) 
+        if (intake_cube) intake_deployed = CubeShoot;
+        else intake_deployed = ConeIn;
+      else 
+        if (intake_cube) intake_deployed = CubeIn;
+        else intake_deployed = Stop;
 
       // Control robot
       it.SetDeployed(intake_deployed);

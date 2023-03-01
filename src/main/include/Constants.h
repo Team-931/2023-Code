@@ -77,11 +77,12 @@ constexpr double momentStage1 = 190.1, nAngleStage1 = 6.1/360,
 constexpr double maxVel = 2 * velPerRPS, maxAccel = .2 * velPerRPS;//for Motion Magic
 // the Motion Magic parameters are translated in interanl units from rotations/sec and rotations/sec^2
 constexpr double CtlP = 0.1, CtlF = 0.5 * 1024 / maxVel;//for PID
-constexpr double initialCorrections[] = {19 * ticksPerRotation * gear1to2 / 360, 259 * ticksPerRotation / 360, 330 * ticksPerRotation / 360};
+constexpr double initialCorrections[] = {-19 * ticksPerRotation * gear1to2 / 360, 
+                                (125 -19) * ticksPerRotation / 360, (125 + 224) * ticksPerRotation / 360};
 //constexpr double initialCorrections[] = {0 * ticksPerRotation * gear1to2 / 360, 10 * ticksPerRotation / 360, 10 * ticksPerRotation / 360};
 // limits of motion, per stage
 constexpr double minDegrees[] = {-120 * ticksPerRotation * gear1to2 / 360, 15 * ticksPerRotation / 360, 15 * ticksPerRotation / 360},
-                 maxDegrees[] = {120 * ticksPerRotation * gear1to2 / 360, 345 * ticksPerRotation / 360, 345 * ticksPerRotation / 360};
+                 maxDegrees[] = {120 * ticksPerRotation * gear1to2 / 360, 350 * ticksPerRotation / 360, 350 * ticksPerRotation / 360};
 }  // namespace Arm
 
 }  // namespace Constants

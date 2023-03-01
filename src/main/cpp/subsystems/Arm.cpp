@@ -20,7 +20,7 @@ Arm::Arm()
       stage3(stage3Id) {
   //stage1.Follow(stage2);
   stage1.SetInverted(TalonFXInvertType::Clockwise);
-  stage2.SetInverted(TalonFXInvertType::CounterClockwise);
+  stage2.SetInverted(TalonFXInvertType::Clockwise);
   stage3.SetInverted(TalonFXInvertType::Clockwise);
   stage1.SetNeutralMode(Brake);
   stage2.SetNeutralMode(Brake);
@@ -37,9 +37,6 @@ Arm::Arm()
   stage3.Config_kF(0, CtlF);
   stage3.ConfigMotionCruiseVelocity(maxVel);
   stage3.ConfigMotionAcceleration(maxAccel);
-  stage1.SetSelectedSensorPosition(initialCorrections[0]);
-  stage2.SetSelectedSensorPosition(initialCorrections[1]);
-  stage2.SetSelectedSensorPosition(initialCorrections[2]);
   stage1.ConfigReverseSoftLimitThreshold(minDegrees[0]);
   stage1.ConfigReverseSoftLimitEnable(true);
   stage2.ConfigReverseSoftLimitThreshold(minDegrees[1]);
@@ -47,17 +44,30 @@ Arm::Arm()
   stage3.ConfigReverseSoftLimitThreshold(minDegrees[2]);
   stage3.ConfigReverseSoftLimitEnable(true);
   stage1.ConfigForwardSoftLimitThreshold(maxDegrees[0]);
-  stage1.ConfigForwardSoftLimitEnable(true);
+  stage1.ConfigForwardSoftLimitEnable(true, 50);
   stage2.ConfigForwardSoftLimitThreshold(maxDegrees[1]);
-  stage2.ConfigForwardSoftLimitEnable(true);
+  stage2.ConfigForwardSoftLimitEnable(true, 50);
   stage3.ConfigForwardSoftLimitThreshold(maxDegrees[2]);
-  stage3.ConfigForwardSoftLimitEnable(true);
+  stage3.ConfigForwardSoftLimitEnable(true, 50);
+  stage1.SetSelectedSensorPosition(-initialCorrections[0]);
+  stage2.SetSelectedSensorPosition(initialCorrections[1]);
+  stage3.SetSelectedSensorPosition(initialCorrections[2]);
 }
 
 void Arm::Periodic() {
   /* frc::SmartDashboard::PutNumber("shooterSpeed(actual)",
                                  stage2.GetSelectedSensorVelocity());
    */
+  double theta1=stage1.GetSelectedSensorPosition() * 360 / ticksPerRotation / gear1to2;
+  double theta2=stage2.GetSelectedSensorPosition() * 360 / ticksPerRotation;
+  double theta3=stage3.GetSelectedSensorPosition() * 360 / ticksPerRotation;
+  double s1 = theta1, s2 = theta2 - s1, s3 = theta3 - s2;
+  frc::SmartDashboard::PutNumber("theta1", theta1);
+  frc::SmartDashboard::PutNumber("theta2", theta2);
+  frc::SmartDashboard::PutNumber("theta3", theta3);
+  frc::SmartDashboard::PutNumber("s1", s1);
+  frc::SmartDashboard::PutNumber("s2", s2);
+  frc::SmartDashboard::PutNumber("s3", s3);
 }
 
 void Arm::SetAngles(double deg1, double deg2, double deg3) {

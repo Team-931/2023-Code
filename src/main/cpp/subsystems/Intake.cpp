@@ -14,7 +14,8 @@ Intake::Intake()
 }
 
 void Intake::Periodic() {
-    wheels.Set(whpow * (int) deployed);
+    if (deployed == CubeShoot) wheels.Set(-1); //todo: make constant
+    else wheels.Set(whpow * (int) deployed);
 }
 
 void Intake::SetDeployed(IntakeState d) { deployed = d; }

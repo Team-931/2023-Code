@@ -5,7 +5,7 @@
 #include <frc2/command/SubsystemBase.h>
 #include <rev/cansparkmax.h>
 
-enum IntakeState {Stop = 0, ConeIn = 1, CubeIn = -1};
+enum IntakeState {Stop = 0, ConeIn = 1, CubeIn = -1, CubeShoot = 2};
 
 class Intake : public frc2::SubsystemBase {
  public:
