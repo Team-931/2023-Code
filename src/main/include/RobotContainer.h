@@ -51,7 +51,10 @@ class RobotContainer {
   // get throttle from the selected joystick in our coords
   double GetThrottle();
   //
-  bool GetFieldCenterToggle();
+  # ifdef FdCtrTog
+bool GetFieldCenterToggle();
+  # endif
+  bool GetZeroYaw();
 
  private:
   // The robot's subsystems and commands are defined here...

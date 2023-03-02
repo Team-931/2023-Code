@@ -67,6 +67,10 @@ class DriveTrain : public frc2::SubsystemBase {
   void SetV(double linX, double linY, double rot, double throttles,
             bool fieldcentered = true);
 
+  void ZeroYaw() {
+    navx.ZeroYaw();
+  }
+
   /**
    * Will be called periodically whenever the CommandScheduler runs.
    */

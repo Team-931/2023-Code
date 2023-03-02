@@ -79,6 +79,10 @@ bool RobotContainer::GetFieldCenterToggle() {
   return drivestickJ.GetTriggerPressed();
 }
 # endif
+bool RobotContainer::GetZeroYaw() {
+  if (XBox) return driverstick.GetAButtonReleased();
+  return drivestickJ.GetTopReleased();
+}
   // Values determined empirically by wiggling the joystick
 // around. If you find that it tends to "stick" when released
 // or jolt around unexpectedly, you may need to increase these.
@@ -111,7 +115,8 @@ void RobotContainer::DrvbyStick::Execute() {
       static bool fieldcentered = true;
 # ifdef FdCtrTog
       if (bot.GetFieldCenterToggle()) fieldcentered ^= true;
-# endif      
+# endif     
+      if (bot.GetZeroYaw()) it.ZeroYaw();
       // todo: add throttle
   double linX = -bot.GetX(),
         linY = bot.GetY(),
