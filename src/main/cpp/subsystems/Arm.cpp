@@ -49,7 +49,7 @@ Arm::Arm()
   stage2.ConfigForwardSoftLimitEnable(true, 50);
   stage3.ConfigForwardSoftLimitThreshold(maxDegrees[2]);
   stage3.ConfigForwardSoftLimitEnable(true, 50);
-  stage1.SetSelectedSensorPosition(-initialCorrections[0]);
+  stage1.SetSelectedSensorPosition(initialCorrections[0]);
   stage2.SetSelectedSensorPosition(initialCorrections[1]);
   stage3.SetSelectedSensorPosition(initialCorrections[2]);
 }
@@ -80,5 +80,19 @@ void Arm::SetAngles(double deg1, double deg2, double deg3) {
   stage2.Set(ControlMode::MotionMagic, (deg1 + deg2) * ticksPerRotation, 
     DemandType::DemandType_ArbitraryFeedForward, -g2);
   stage3.Set(ControlMode::MotionMagic, (deg2 + deg3) * ticksPerRotation, 
+    DemandType::DemandType_ArbitraryFeedForward, g3);
+}
+void Arm::SetVeloc(double vel1, double vel2, double vel3) {
+  double deg1 = stage1.GetSelectedSensorPosition() / ticksPerRotation / gear1to2,
+       deg2 = stage2.GetSelectedSensorPosition() / ticksPerRotation - deg1, 
+       deg3 = stage2.GetSelectedSensorPosition() / ticksPerRotation - deg2;
+  double g3 = gravCompensator * momentStage3 * sin (2*pi*(deg3 - nAngleStage3));//fix this
+  double g2 = gravCompensator * momentStage2 * sin (2*pi*(deg2 - nAngleStage2)) + g3;
+  double g1 = gravCompensator * momentStage1 * sin (2*pi*(deg1 - nAngleStage1)) + g2;
+  stage1.Set(ControlMode::Velocity, vel1 * ticksPerRotation * gear1to2/10,
+    DemandType::DemandType_ArbitraryFeedForward, g1 / gear1to2);
+  stage2.Set(ControlMode::Velocity, vel2 * ticksPerRotation/10, 
+    DemandType::DemandType_ArbitraryFeedForward, -g2);
+  stage3.Set(ControlMode::Velocity, vel3 * ticksPerRotation/10, 
     DemandType::DemandType_ArbitraryFeedForward, g3);
 }

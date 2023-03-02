@@ -81,6 +81,12 @@ double SwerveModule::SetV(double linX, double linY, double rot) {
   rot /= rotationRescale;
   linX += offsetY * rot;
   linY -= offsetX * rot;
+  if (linX == 0 && linY == 0) {
+    turn.Set(ControlMode::PercentOutput, 0);
+    angle = turn.GetSelectedSensorPosition() / ticksPerRadian;
+    speed = 0;
+    return 0;
+  }
   double spd = speed = std::sqrt(linX * linX + linY * linY),
          ang = -std::atan2(linY, linX);//this is a kludge
   // this puts angle into same semicircle as its old value,
@@ -117,7 +123,7 @@ void SwerveModule::Periodic() {
 }
 void DriveTrain::Init() {
   for (auto& wheel : wheels) wheel.Init();
-  symph.Play();
+  //symph.Play();
 }
 
 void SwerveModule::Init() {

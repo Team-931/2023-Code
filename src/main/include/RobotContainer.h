@@ -81,6 +81,7 @@ struct DrvbyStick
     void Execute() override; 
     Arm& it;
     frc::XboxController& joy;
+    bool setPos{false};
   } turretbyStick{arm, operatorstick};
 
   struct IntbyStick

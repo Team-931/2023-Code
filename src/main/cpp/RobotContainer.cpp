@@ -71,12 +71,12 @@ double RobotContainer::GetThrottle() {
             driverstick.GetRightTriggerAxis() * (1 - minThrottle));
   return (1 + minThrottle - drivestickJ.GetThrottle() * (1 - minThrottle)) / 2;
 }
-
+# ifdef FdCtrTog
 bool RobotContainer::GetFieldCenterToggle() {
   if (XBox) return driverstick.GetRightBumperPressed();
   return drivestickJ.GetTriggerPressed();
 }
-
+# endif
   // Values determined empirically by wiggling the joystick
 // around. If you find that it tends to "stick" when released
 // or jolt around unexpectedly, you may need to increase these.
@@ -107,7 +107,9 @@ double QuadraticScaling(double x) { return (x < 0.0 ? -1.0 : 1.0) * x * x; }
 
 void RobotContainer::DrvbyStick::Execute() {
       static bool fieldcentered = true;
+# ifdef FdCtrTog
       if (bot.GetFieldCenterToggle()) fieldcentered ^= true;
+# endif      
       // todo: add throttle
   double linX = -bot.GetX(),
         linY = bot.GetY(),
@@ -127,32 +129,44 @@ void RobotContainer::DrvbyStick::Execute() {
 
 void RobotContainer::TurbyStick::Execute() {
   // testing only
-  static bool setPos = false, hold = false;
+  static bool hold = false;
+  if (frc::DriverStation::IsDisabled()){
+    setPos = false;
+    return;
+    }
   double x = joy.GetLeftX(), y = joy.GetRightX();
   //if (joy.GetAButtonPressed()) setPos = ! setPos;
   //if (joy.GetLeftStickButtonPressed()) hold = ! hold;
   if (joy.GetAButtonPressed()) {
-    it.SetAngles(25, 14, 330);
+    it.SetAngles(35, 30, 224);
     setPos = true;
   }
-    x /= 2; y /= 10;
+  if (joy.GetBackButtonPressed()) {
+    it.SetAngles(72, 48, 106);
+    setPos = true;
+  }
+  if (joy.GetStartButtonPressed()) {
+    it.SetAngles(21, 46, 111);
+    setPos = true;
+  }
+    x /= 10; y /= 10;
     if (joy.GetXButton()){
-      it.SetMotors(x, 0, 0);
+      it.SetVeloc(x, 0, 0);
       setPos = false;
       if (! hold) 
         frc::SmartDashboard::PutNumber("stage 1 power:", x);
     }    
     else if (joy.GetYButton()){
-      it.SetMotors(0, x, 0);
+      it.SetVeloc(0, x, 0);
       setPos = false;
       if (! hold) 
         frc::SmartDashboard::PutNumber("stage 2 power:", x);
     }    
     else if (joy.GetBButton()){
-      it.SetMotors(0, 0, x);
+      it.SetVeloc(0, 0, x);
       setPos = false;
       if (! hold) 
         frc::SmartDashboard::PutNumber("stage 3 power:", x);
     }
-    else if (setPos == false) it.SetMotors(0, 0, 0);
+    else if (setPos == false) it.SetVeloc(0, 0, 0);
 }
