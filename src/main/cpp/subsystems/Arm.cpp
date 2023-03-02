@@ -82,6 +82,11 @@ void Arm::SetAngles(double deg1, double deg2, double deg3) {
   stage3.Set(ControlMode::MotionMagic, (deg2 + deg3) * ticksPerRotation, 
     DemandType::DemandType_ArbitraryFeedForward, g3);
 }
+
+void Arm::SetAngles(double (&angles)[3]) {
+  SetAngles(angles[0], angles[1], angles[2]);
+}
+
 void Arm::SetVeloc(double vel1, double vel2, double vel3) {
   double deg1 = stage1.GetSelectedSensorPosition() / ticksPerRotation / gear1to2,
        deg2 = stage2.GetSelectedSensorPosition() / ticksPerRotation - deg1, 

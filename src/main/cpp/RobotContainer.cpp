@@ -26,6 +26,8 @@ void RobotContainer::Init() {
   if (frc::DriverStation::GetJoystickIsXbox(0)) XBox = true;
 }
 
+# include "armVectors.inc"
+
 class testarmraise : public frc2::CommandHelper<frc2::CommandBase, testarmraise> {
   public:
    testarmraise (Arm& a) : arm(a) {
@@ -138,15 +140,15 @@ void RobotContainer::TurbyStick::Execute() {
   //if (joy.GetAButtonPressed()) setPos = ! setPos;
   //if (joy.GetLeftStickButtonPressed()) hold = ! hold;
   if (joy.GetAButtonPressed()) {
-    it.SetAngles(35, 30, 224);
+    it.SetAngles(openInFront);
     setPos = true;
   }
   if (joy.GetBackButtonPressed()) {
-    it.SetAngles(72, 48, 106);
+    it.SetAngles(highPost);
     setPos = true;
   }
   if (joy.GetStartButtonPressed()) {
-    it.SetAngles(21, 46, 111);
+    it.SetAngles(lowPost);
     setPos = true;
   }
     x /= 10; y /= 10;
