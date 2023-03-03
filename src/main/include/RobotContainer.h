@@ -80,8 +80,9 @@ struct DrvbyStick
       : public frc2::CommandHelper<frc2::CommandBase, TurbyStick> {
     TurbyStick(Arm& t, frc::XboxController& j) : it(t), joy(j) {
       AddRequirements(&t);
-    }
+          }
     void Execute() override; 
+    bool RunsWhenDisabled() const override {return true;}
     Arm& it;
     frc::XboxController& joy;
     bool setPos{false};

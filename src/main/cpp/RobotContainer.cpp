@@ -139,6 +139,10 @@ void RobotContainer::TurbyStick::Execute() {
   static bool hold = false;
   if (frc::DriverStation::IsDisabled()){
     setPos = false;
+    joy.GetAButtonPressed();
+    joy.GetBackButtonPressed();
+    joy.GetStartButtonPressed();
+    it.SetMotors(0, 0, 0);
     return;
     }
   double x = joy.GetLeftX(), y = joy.GetRightX();
@@ -146,6 +150,10 @@ void RobotContainer::TurbyStick::Execute() {
   //if (joy.GetLeftStickButtonPressed()) hold = ! hold;
   if (joy.GetAButtonPressed()) {
     it.SetAngles(openInFront);
+    setPos = true;
+  }
+  if (joy.GetRightStickButtonPressed()) {
+    it.SetAngles(foldedDown);
     setPos = true;
   }
   if (joy.GetBackButtonPressed()) {
@@ -156,7 +164,7 @@ void RobotContainer::TurbyStick::Execute() {
     it.SetAngles(lowPost);
     setPos = true;
   }
-    x /= 10; y /= 10;
+    x /= 5; y /= 10;
     if (joy.GetXButton()){
       it.SetVeloc(x, 0, 0);
       setPos = false;

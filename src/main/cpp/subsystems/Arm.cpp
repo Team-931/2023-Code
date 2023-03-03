@@ -90,7 +90,7 @@ void Arm::SetAngles(double (&angles)[3]) {
 void Arm::SetVeloc(double vel1, double vel2, double vel3) {
   double deg1 = stage1.GetSelectedSensorPosition() / ticksPerRotation / gear1to2,
        deg2 = stage2.GetSelectedSensorPosition() / ticksPerRotation - deg1, 
-       deg3 = stage2.GetSelectedSensorPosition() / ticksPerRotation - deg2;
+       deg3 = stage3.GetSelectedSensorPosition() / ticksPerRotation - deg2;
   double g3 = gravCompensator * momentStage3 * sin (2*pi*(deg3 - nAngleStage3));//fix this
   double g2 = gravCompensator * momentStage2 * sin (2*pi*(deg2 - nAngleStage2)) + g3;
   double g1 = gravCompensator * momentStage1 * sin (2*pi*(deg1 - nAngleStage1)) + g2;
