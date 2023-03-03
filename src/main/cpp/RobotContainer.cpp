@@ -164,7 +164,7 @@ void RobotContainer::TurbyStick::Execute() {
     it.SetAngles(lowPost);
     setPos = true;
   }
-    x /= 5; y /= 10;
+    x /= 10; y /= 10;
     if (joy.GetXButton()){
       it.SetVeloc(x, 0, 0);
       setPos = false;

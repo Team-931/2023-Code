@@ -16,6 +16,7 @@ class Arm : public frc2::SubsystemBase {
   void SetAngles(double stage1Degrees, double stage2Degrees, double stage3Degrees); // 0, 0 is start position
   void SetAngles(double (&angles)[3]); 
   void SetVeloc(double stage1DegreesPerSec, double stage2DegreesPerSec, double stage3DegreesPerSec); 
+  void SetLinVeloc(double fwdInPerSec, double upInPerSec, double stage3DegreesPerSec);
   
   void SetMotors(double st1, double st2, double st3){
     stage1.Set(st1); stage2.Set(st2); stage3.Set(st3);// testing only

@@ -96,8 +96,26 @@ void Arm::SetVeloc(double vel1, double vel2, double vel3) {
   double g1 = gravCompensator * momentStage1 * sin (2*pi*(deg1 - nAngleStage1)) + g2;
   stage1.Set(ControlMode::Velocity, vel1 * ticksPerRotation * gear1to2/10,
     DemandType::DemandType_ArbitraryFeedForward, g1 / gear1to2);
-  stage2.Set(ControlMode::Velocity, vel2 * ticksPerRotation/10, 
+  stage2.Set(ControlMode::Velocity, (vel2 + vel1) * ticksPerRotation/10, 
     DemandType::DemandType_ArbitraryFeedForward, -g2);
-  stage3.Set(ControlMode::Velocity, vel3 * ticksPerRotation/10, 
+  stage3.Set(ControlMode::Velocity, (vel3 + vel2) * ticksPerRotation/10, 
+    DemandType::DemandType_ArbitraryFeedForward, g3);
+}
+void Arm::SetLinVeloc(double fwdInPerSec, double upInPerSec, double vel3)
+{
+  double  deg1 = stage1.GetSelectedSensorPosition() / ticksPerRotation / gear1to2,
+          theta2 = stage2.GetSelectedSensorPosition() / ticksPerRotation,
+          deg2 = theta2 - deg1, 
+          deg3 = stage3.GetSelectedSensorPosition() / ticksPerRotation - deg2;
+  double g3 = gravCompensator * momentStage3 * sin (2*pi*(deg3 - nAngleStage3));//fix this
+  double g2 = gravCompensator * momentStage2 * sin (2*pi*(deg2 - nAngleStage2)) + g3;
+  double g1 = gravCompensator * momentStage1 * sin (2*pi*(deg1 - nAngleStage1)) + g2;
+  double vel1 = (sin(deg2) * fwdInPerSec + cos(deg2) * upInPerSec) * 24 / 21,
+         vel2 = sin(deg1) * fwdInPerSec - cos(deg2) * upInPerSec;
+  stage1.Set(ControlMode::Velocity, vel1 * ticksPerRotation * gear1to2/10,
+    DemandType::DemandType_ArbitraryFeedForward, g1 / gear1to2);
+  stage2.Set(ControlMode::Velocity, (vel2 + vel1) * ticksPerRotation/10, 
+    DemandType::DemandType_ArbitraryFeedForward, -g2);
+  stage3.Set(ControlMode::Velocity, (vel3 + vel2) * ticksPerRotation/10, 
     DemandType::DemandType_ArbitraryFeedForward, g3);
 }
