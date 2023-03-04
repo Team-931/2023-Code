@@ -30,23 +30,24 @@ void RobotContainer::Init() {
 
 class testarmraise : public frc2::CommandHelper<frc2::CommandBase, testarmraise> {
   public:
-   testarmraise (Arm& a) : arm(a) {
+   testarmraise (Arm& a, double (&angles)[3]) : arm(a), angs(angles) {
     AddRequirements (&a);
    }
    void Initialize() override {
-    arm.SetAngles(openInFront);
+    arm.SetAngles(angs);
    }
    void Execute() override;
    bool IsFinished() override;
 
   private:
    Arm& arm;
-   int timesInRange;
+   double (&angs)[3];
+   int timesInRange = 0;
    static const int minTimesInRange =  10;
 };
 
 void testarmraise::Execute() {
-  if (arm.AtSetpoint(openInFront)) ++ timesInRange;
+  if (arm.AtSetpoint(angs)) ++ timesInRange;
   else timesInRange = 0;
 }
 
@@ -62,7 +63,7 @@ void RobotContainer::ConfigureButtonBindings() {
 
 frc2::Command* RobotContainer::GetAutonomousCommand() {
   // An example command will be run in autonomous
-  if(1) return new testarmraise(arm);
+  if(1) return new testarmraise(arm, openInFront);
   return &m_autonomousCommand;
 }
 

@@ -99,7 +99,7 @@ void Arm::SetAngles(double (&angles)[3]) {
 }
 
 bool Arm::AtSetpoint(double (&angles)[3]) {
-  constexpr double tolerance = 1. / 2/ pi /24;
+  constexpr double tolerance = 1./*inch*// 2/ pi /24/*inches of stage1*/;
   double deg1 = stage1.GetSelectedSensorPosition() / ticksPerRotation / gear1to2,
        deg2 = stage2.GetSelectedSensorPosition() / ticksPerRotation - deg1, 
        deg3 = stage3.GetSelectedSensorPosition() / ticksPerRotation - deg2;
