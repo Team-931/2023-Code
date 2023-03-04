@@ -34,12 +34,26 @@ class testarmraise : public frc2::CommandHelper<frc2::CommandBase, testarmraise>
     AddRequirements (&a);
    }
    void Initialize() override {
-    arm.SetAngles(25, 14, 330);
+    arm.SetAngles(openInFront);
    }
+   void Execute() override;
+   bool IsFinished() override;
 
   private:
    Arm& arm;
+   int timesInRange;
+   static const int minTimesInRange =  10;
 };
+
+void testarmraise::Execute() {
+  if (arm.AtSetpoint(openInFront)) ++ timesInRange;
+  else timesInRange = 0;
+}
+
+bool testarmraise::IsFinished() {
+  return frc::DriverStation::IsDisabled() ||
+    timesInRange >= minTimesInRange;
+}
 
 void RobotContainer::ConfigureButtonBindings() {
   // Configure your button bindings here
@@ -135,8 +149,6 @@ void RobotContainer::DrvbyStick::Execute() {
     }
 
 void RobotContainer::TurbyStick::Execute() {
-  // testing only
-  static bool hold = false;
   if (frc::DriverStation::IsDisabled()){
     setPos = false;
     joy.GetAButtonPressed();
@@ -168,20 +180,17 @@ void RobotContainer::TurbyStick::Execute() {
     if (joy.GetXButton()){
       it.SetVeloc(x, 0, 0);
       setPos = false;
-      if (! hold) 
-        frc::SmartDashboard::PutNumber("stage 1 power:", x);
     }    
     else if (joy.GetYButton()){
       it.SetVeloc(0, x, 0);
       setPos = false;
-      if (! hold) 
-        frc::SmartDashboard::PutNumber("stage 2 power:", x);
     }    
     else if (joy.GetBButton()){
       it.SetVeloc(0, 0, x);
       setPos = false;
-      if (! hold) 
-        frc::SmartDashboard::PutNumber("stage 3 power:", x);
     }
-    else if (setPos == false) it.SetVeloc(0, 0, 0);
+    else if (setPos == false) {
+      it.HoldStill();
+      setPos = true;
+    }
 }

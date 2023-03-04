@@ -70,13 +70,14 @@ namespace Arm {
 constexpr int stage1Id = 9, stage2Id = 8, stage3Id = 10;
 constexpr double gearing = 36, ticksPerRotation = gearing * 2048, velPerRPS = ticksPerRotation / 10,
         ticksPerRadian = ticksPerRotation / 2 / pi,
-        gravCompensator = 9.81 /*metric gravity*/ /39.37 /*inch/meter*/ / 2.205 /*lb/kg*/ / 4.69 /*stall torque*/ / gearing, gear1to2 = 2.*24/22;
+        gravCompensator = 9.81 /*metric gravity*/ /39.37 /*inch/meter*/ / 2.205 /*lb/kg*/
+             / 4.69 /*stall torque*/ / gearing, gear1to2 = 2.*24/22;
 constexpr double momentStage1 = 24/*in*/*14.5/*lb*/, nAngleStage1 = 0/360,
-                 momentStage2 = 21/*in*/*9.3/*lb*/, nAngleStage2 = -5/360,
+                 momentStage2 = 21/*in*/*9.3/*lb*/, nAngleStage2 = -0/360,
                  momentStage3 = 19/*in*/*3.3/*lb*/, nAngleStage3 = 0/360; //todo: real values
 constexpr double maxVel = 2 * velPerRPS, maxAccel = .2 * velPerRPS;//for Motion Magic
 // the Motion Magic parameters are translated in interanl units from rotations/sec and rotations/sec^2
-constexpr double CtlP = 0.1, CtlF = 0.5 * 1024 / maxVel;//for PID
+constexpr double CtlP0 = 0.75, CtlP1 = .1, CtlF = 0.5 * 1024 / maxVel;//for PID
 constexpr double initialCorrections[] = {-19 * ticksPerRotation * gear1to2 / 360, 
                                 (125 -19) * ticksPerRotation / 360, (125 + 224) * ticksPerRotation / 360};
 //constexpr double initialCorrections[] = {0 * ticksPerRotation * gear1to2 / 360, 10 * ticksPerRotation / 360, 10 * ticksPerRotation / 360};

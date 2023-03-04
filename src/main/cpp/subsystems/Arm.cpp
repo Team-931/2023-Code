@@ -25,16 +25,24 @@ Arm::Arm()
   stage1.SetNeutralMode(Brake);
   stage2.SetNeutralMode(Brake);
   stage3.SetNeutralMode(Brake);
-  stage1.Config_kP(0, CtlP);
+  // Slot 0 is for Motion Magic
+  stage1.Config_kP(0, CtlP0);
   stage1.Config_kF(0, CtlF/gear1to2);
+  // Slot 1 is for Velocity control
+  stage1.Config_kP(1, CtlP1);
+  stage1.Config_kF(1, CtlF/gear1to2);
   stage1.ConfigMotionCruiseVelocity(maxVel*gear1to2);
   stage1.ConfigMotionAcceleration(maxAccel*gear1to2);
-  stage2.Config_kP(0, CtlP);
+  stage2.Config_kP(0, CtlP0);
   stage2.Config_kF(0, CtlF);
+  stage2.Config_kP(1, CtlP1);
+  stage2.Config_kF(1, CtlF);
   stage2.ConfigMotionCruiseVelocity(maxVel);
   stage2.ConfigMotionAcceleration(maxAccel);
-  stage3.Config_kP(0, CtlP);
+  stage3.Config_kP(0, CtlP0);
   stage3.Config_kF(0, CtlF);
+  stage3.Config_kP(1, CtlP1);
+  stage3.Config_kF(1, CtlF);
   stage3.ConfigMotionCruiseVelocity(maxVel);
   stage3.ConfigMotionAcceleration(maxAccel);
   stage1.ConfigReverseSoftLimitThreshold(minDegrees[0]);
@@ -75,6 +83,9 @@ void Arm::SetAngles(double deg1, double deg2, double deg3) {
   double g3 = gravCompensator * momentStage3 * sin (2*pi*(deg3 - nAngleStage3));//fix this
   double g2 = gravCompensator * momentStage2 * sin (2*pi*(deg2 - nAngleStage2)) + g3;
   double g1 = gravCompensator * momentStage1 * sin (2*pi*(deg1 - nAngleStage1)) + g2;
+  stage1.SelectProfileSlot(0,0);
+  stage2.SelectProfileSlot(0,0);
+  stage3.SelectProfileSlot(0,0);
   stage1.Set(ControlMode::MotionMagic, deg1 * ticksPerRotation * gear1to2,
     DemandType::DemandType_ArbitraryFeedForward, g1 / gear1to2);
   stage2.Set(ControlMode::MotionMagic, (deg1 + deg2) * ticksPerRotation, 
@@ -87,6 +98,23 @@ void Arm::SetAngles(double (&angles)[3]) {
   SetAngles(angles[0], angles[1], angles[2]);
 }
 
+bool Arm::AtSetpoint(double (&angles)[3]) {
+  constexpr double tolerance = 1. / 2/ pi /24;
+  double deg1 = stage1.GetSelectedSensorPosition() / ticksPerRotation / gear1to2,
+       deg2 = stage2.GetSelectedSensorPosition() / ticksPerRotation - deg1, 
+       deg3 = stage3.GetSelectedSensorPosition() / ticksPerRotation - deg2;
+  return abs(deg1 - angles[0]/360) <= tolerance && 
+        abs(deg2 - angles[1]/360) <= tolerance &&
+        abs(deg3 - angles[2]/360) <= tolerance;
+}
+
+void Arm::HoldStill() {
+  double deg1 = stage1.GetSelectedSensorPosition() / ticksPerRotation / gear1to2,
+       deg2 = stage2.GetSelectedSensorPosition() / ticksPerRotation - deg1, 
+       deg3 = stage3.GetSelectedSensorPosition() / ticksPerRotation - deg2;
+  SetAngles(360*deg1, 360*deg2, 360*deg3);
+}
+
 void Arm::SetVeloc(double vel1, double vel2, double vel3) {
   double deg1 = stage1.GetSelectedSensorPosition() / ticksPerRotation / gear1to2,
        deg2 = stage2.GetSelectedSensorPosition() / ticksPerRotation - deg1, 
@@ -94,6 +122,9 @@ void Arm::SetVeloc(double vel1, double vel2, double vel3) {
   double g3 = gravCompensator * momentStage3 * sin (2*pi*(deg3 - nAngleStage3));//fix this
   double g2 = gravCompensator * momentStage2 * sin (2*pi*(deg2 - nAngleStage2)) + g3;
   double g1 = gravCompensator * momentStage1 * sin (2*pi*(deg1 - nAngleStage1)) + g2;
+  stage1.SelectProfileSlot(1,0);
+  stage2.SelectProfileSlot(1,0);
+  stage3.SelectProfileSlot(1,0);
   stage1.Set(ControlMode::Velocity, vel1 * ticksPerRotation * gear1to2/10,
     DemandType::DemandType_ArbitraryFeedForward, g1 / gear1to2);
   stage2.Set(ControlMode::Velocity, (vel2 + vel1) * ticksPerRotation/10, 
@@ -112,6 +143,9 @@ void Arm::SetLinVeloc(double fwdInPerSec, double upInPerSec, double vel3)
   double g1 = gravCompensator * momentStage1 * sin (2*pi*(deg1 - nAngleStage1)) + g2;
   double vel1 = (sin(deg2) * fwdInPerSec + cos(deg2) * upInPerSec) * 24 / 21,
          vel2 = sin(deg1) * fwdInPerSec - cos(deg2) * upInPerSec;
+  stage1.SelectProfileSlot(1,0);
+  stage2.SelectProfileSlot(1,0);
+  stage3.SelectProfileSlot(1,0);
   stage1.Set(ControlMode::Velocity, vel1 * ticksPerRotation * gear1to2/10,
     DemandType::DemandType_ArbitraryFeedForward, g1 / gear1to2);
   stage2.Set(ControlMode::Velocity, (vel2 + vel1) * ticksPerRotation/10, 
