@@ -56,6 +56,8 @@ constexpr int absSubtraction[]{2220, 2148, 2695, 1023};  // to align the wheels
 constexpr double perSecond = 4, // inversely proportional to the intended response time
                 maxVel = perSecond * velPerRPS, maxAccel = perSecond * perSecond * velPerRPS;//for Motion Magic
 constexpr double CtlP = 0.1, CtlF = 0.25*2048/maxAccel;//for PID
+constexpr double driveGearing = 6.55, wheelDiam = 4/*in*/, 
+                inPerTick = wheelDiam * pi / driveGearing / 2048;
 }  // namespace DriveTrain
 
 namespace Intake {
@@ -72,9 +74,10 @@ constexpr double gearing = 36, ticksPerRotation = gearing * 2048, velPerRPS = ti
         ticksPerRadian = ticksPerRotation / 2 / pi,
         gravCompensator = 9.81 /*metric gravity*/ /39.37 /*inch/meter*/ / 2.205 /*lb/kg*/
              / 4.69 /*stall torque*/ / gearing, gear1to2 = 2.*24/22;
-constexpr double momentStage1 = 24/*in*/*14.5/*lb*/, nAngleStage1 = 0/360,
-                 momentStage2 = 21/*in*/*9.3/*lb*/, nAngleStage2 = -0/360,
-                 momentStage3 = 19/*in*/*3.3/*lb*/, nAngleStage3 = 0/360; //todo: real values
+constexpr double ht= 40, len1 = 24, len2 = 21, len3 = 19;
+constexpr double momentStage1 = len1/*in*/*14.5/*lb*/, nAngleStage1 = 0/360,
+                 momentStage2 = len2/*in*/*9.3/*lb*/, nAngleStage2 = -0/360,
+                 momentStage3 = len3/*in*/*3.3/*lb*/, nAngleStage3 = 0/360; //todo: real values
 constexpr double maxVel = 2 * velPerRPS, maxAccel = .2 * velPerRPS;//for Motion Magic
 // the Motion Magic parameters are translated in interanl units from rotations/sec and rotations/sec^2
 constexpr double CtlP0 = 0.75, CtlP1 = .1, CtlF = 0.5 * 1024 / maxVel;//for PID

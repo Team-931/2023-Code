@@ -38,6 +38,7 @@ class SwerveModule : public frc2::SubsystemBase {
    * simulation.
    */
   void SimulationPeriodic() override;
+  double GetDistance();
 
  private:
   // Components (e.g. motor controllers and sensors) should generally be
@@ -83,6 +84,7 @@ class DriveTrain : public frc2::SubsystemBase {
    * simulation.
    */
   void SimulationPeriodic() override;
+  double GetDistance(int wheelIx=0);
 
  private:
   // Components (e.g. motor controllers and sensors) should generally be

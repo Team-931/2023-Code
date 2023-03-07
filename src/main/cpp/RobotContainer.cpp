@@ -1,7 +1,8 @@
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
-
+#include <frc2/command/SequentialCommandGroup.h>
+# include <frc2/command/WaitCommand.h>
 #include "RobotContainer.h"
 
 #include <frc/DriverStation.h>
@@ -9,6 +10,7 @@
 #include "Constants.h"
 using namespace Constants::RobotContainer;
 
+# include "commands/AutoDrive.h"
 
 RobotContainer::RobotContainer()
     : m_autonomousCommand(&intake), drivebyStick(drivetrain, *this) {
@@ -28,20 +30,22 @@ void RobotContainer::Init() {
 
 # include "armVectors.inc"
 
-class testarmraise : public frc2::CommandHelper<frc2::CommandBase, testarmraise> {
+class testarmraise : public /* frc2::CommandHelper< */frc2::WaitCommand/* , testarmraise> */ {
   public:
-   testarmraise (Arm& a, double (&angles)[3]) : arm(a), angs(angles) {
+   testarmraise (Arm& a, const double (&angles)[3], units::second_t timeout = 15_s) : WaitCommand(timeout), arm(a), angs(angles)
+       {
     AddRequirements (&a);
    }
    void Initialize() override {
     arm.SetAngles(angs);
+    timesInRange = 0;
    }
    void Execute() override;
    bool IsFinished() override;
 
   private:
    Arm& arm;
-   double (&angs)[3];
+   const double (&angs)[3];
    int timesInRange = 0;
    static const int minTimesInRange =  10;
 };
@@ -52,9 +56,26 @@ void testarmraise::Execute() {
 }
 
 bool testarmraise::IsFinished() {
+  //return false;
   return frc::DriverStation::IsDisabled() ||
-    timesInRange >= minTimesInRange;
+    (timesInRange >= minTimesInRange);
 }
+
+struct IntCtl
+      : public frc2::WaitCommand {
+    IntCtl(Intake& i, IntakeState s) : WaitCommand(1_s), it(i), state(s) {
+      AddRequirements(&i);
+    }
+    void Execute() override {
+      // Control robot
+      it.SetDeployed(state);
+    }
+    void End(bool) override {
+      it.SetDeployed(Stop);
+    }
+    Intake& it;
+    IntakeState state = Stop;
+  };
 
 void RobotContainer::ConfigureButtonBindings() {
   // Configure your button bindings here
@@ -63,7 +84,13 @@ void RobotContainer::ConfigureButtonBindings() {
 
 frc2::Command* RobotContainer::GetAutonomousCommand() {
   // An example command will be run in autonomous
-  if(1) return new testarmraise(arm, openInFront);
+  if(1) return new frc2::SequentialCommandGroup (
+    testarmraise(arm, openInFront),
+    testarmraise(arm, lowPost),
+    IntCtl(intake, CubeIn),
+    testarmraise(arm, foldedDown, 1_s),
+    AutoDrive(drivetrain, -12*5, 0, .1)
+    );
   return &m_autonomousCommand;
 }
 
@@ -158,11 +185,12 @@ void RobotContainer::TurbyStick::Execute() {
     it.SetMotors(0, 0, 0);
     return;
     }
-  double x = joy.GetLeftX(), y = joy.GetRightX();
+ // double x = joy.GetLeftX(), y = joy.GetRightX();
   //if (joy.GetAButtonPressed()) setPos = ! setPos;
   //if (joy.GetLeftStickButtonPressed()) hold = ! hold;
   if (joy.GetAButtonPressed()) {
-    it.SetAngles(openInFront);
+    if (joy.GetLeftStickButton()) it.SetAngles(openInBack);
+    else it.SetAngles(openInFront);
     setPos = true;
   }
   if (joy.GetRightStickButtonPressed()) {
@@ -174,10 +202,35 @@ void RobotContainer::TurbyStick::Execute() {
     setPos = true;
   }
   if (joy.GetStartButtonPressed()) {
-    it.SetAngles(lowPost);
+    if (joy.GetLeftStickButton()) it.SetAngles(lowPostBack);
+    else it.SetAngles(lowPost);
     setPos = true;
   }
-    x /= 10; y /= 10;
+  if (joy.GetBButtonPressed()) {
+    it.SetAngles(conePickup1);
+    setPos = true;
+  }
+  if (joy.GetBButton() && joy.GetRightBumperPressed()) {
+    it.SetAngles(conePickup2);
+    setPos = true;
+  }
+  if (joy.GetXButtonPressed()) {
+    it.SetAngles(cubePickup1);
+    setPos = true;
+  }
+  if (joy.GetXButton() && joy.GetLeftBumperPressed()) {
+    it.SetAngles(cubePickup2);
+    setPos = true;
+  }
+  if (joy.GetYButton() && joy.GetRightBumperPressed()) {
+    it.SetAngles(coneOnFloor);
+    setPos = true;
+  }
+  if (joy.GetYButton() && joy.GetLeftBumperPressed()) {
+    it.SetAngles(cubeOnFloor);
+    setPos = true;
+  }
+   /*  x /= 10; y /= 10;
     if (joy.GetXButton()){
       it.SetVeloc(x, 0, 0);
       setPos = false;
@@ -190,8 +243,8 @@ void RobotContainer::TurbyStick::Execute() {
       it.SetVeloc(0, 0, x);
       setPos = false;
     }
-    else if (setPos == false) {
+    else*/ if (setPos == false) {
       it.HoldStill();
       setPos = true;
     }
-}
+ }

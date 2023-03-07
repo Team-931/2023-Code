@@ -14,9 +14,9 @@ class Arm : public frc2::SubsystemBase {
   void Periodic() override;
 
   void SetAngles(double stage1Degrees, double stage2Degrees, double stage3Degrees); // 0, 0 is start position
-  void SetAngles(double (&angles)[3]); 
-  bool AtSetpoint(double (&angles)[3]);
-  void SetVeloc(double stage1DegreesPerSec, double stage2DegreesPerSec, double stage3DegreesPerSec); 
+  void SetAngles(const double (&angles)[3]); 
+  bool AtSetpoint(const double (&angles)[3]);
+  void SetVeloc(double stage1RotPerSec, double stage2RotPerSec, double stage3RotPerSec); 
   void SetLinVeloc(double fwdInPerSec, double upInPerSec, double stage3DegreesPerSec);
   void HoldStill();
   void SetMotors(double st1, double st2, double st3){

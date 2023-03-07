@@ -22,12 +22,14 @@ class AutoDrive
    *
    * @param subsystem The subsystem used by this command.
    */
-  AutoDrive(DriveTrain& subsystem, double velocityX, double velocityY);
+  AutoDrive(DriveTrain& subsystem, double fwdDist, double leftDist, double motorPwr);
 
   void Initialize() override;
 
   void Execute() override;
+  bool IsFinished() override;
 
  private:
   DriveTrain& drive;
+  double startEnc, x, y, dist1;
 };

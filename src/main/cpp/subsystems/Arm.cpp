@@ -94,18 +94,18 @@ void Arm::SetAngles(double deg1, double deg2, double deg3) {
     DemandType::DemandType_ArbitraryFeedForward, g3);
 }
 
-void Arm::SetAngles(double (&angles)[3]) {
+void Arm::SetAngles(const double (&angles)[3]) {
   SetAngles(angles[0], angles[1], angles[2]);
 }
 
-bool Arm::AtSetpoint(double (&angles)[3]) {
-  constexpr double tolerance = 1./*inch*// 2/ pi /24/*inches of stage1*/;
+bool Arm::AtSetpoint(const double (&angles)[3]) {
+  constexpr double tolerance = 1./*inch*// 2/ pi /len1 * 360/*inches of stage1*/;
   double deg1 = stage1.GetSelectedSensorPosition() / ticksPerRotation / gear1to2,
        deg2 = stage2.GetSelectedSensorPosition() / ticksPerRotation - deg1, 
        deg3 = stage3.GetSelectedSensorPosition() / ticksPerRotation - deg2;
-  return abs(deg1 - angles[0]/360) <= tolerance && 
-        abs(deg2 - angles[1]/360) <= tolerance &&
-        abs(deg3 - angles[2]/360) <= tolerance;
+  return (abs(deg1 * 360 - angles[0]) <= tolerance) && 
+         (abs(deg2 * 360 - angles[1]) <= tolerance) &&
+         (abs(deg3 * 360 - angles[2]) <= tolerance);
 }
 
 void Arm::HoldStill() {
@@ -138,11 +138,14 @@ void Arm::SetLinVeloc(double fwdInPerSec, double upInPerSec, double vel3)
           theta2 = stage2.GetSelectedSensorPosition() / ticksPerRotation,
           deg2 = theta2 - deg1, 
           deg3 = stage3.GetSelectedSensorPosition() / ticksPerRotation - deg2;
+  int negate = (theta2 > .5) ? -1: 1;
   double g3 = gravCompensator * momentStage3 * sin (2*pi*(deg3 - nAngleStage3));//fix this
   double g2 = gravCompensator * momentStage2 * sin (2*pi*(deg2 - nAngleStage2)) + g3;
   double g1 = gravCompensator * momentStage1 * sin (2*pi*(deg1 - nAngleStage1)) + g2;
-  double vel1 = (sin(deg2) * fwdInPerSec + cos(deg2) * upInPerSec) * 24 / 21,
-         vel2 = sin(deg1) * fwdInPerSec - cos(deg2) * upInPerSec;
+  double vel1 = negate * (sin(deg2) * fwdInPerSec + cos(deg2) * upInPerSec) / (2*pi*len1),
+         vel2 = negate * (sin(deg1) * fwdInPerSec - cos(deg2) * upInPerSec) / (2*pi*len2);
+  frc::SmartDashboard::PutNumber("linvel 1", vel1);
+  frc::SmartDashboard::PutNumber("linvel 2", vel2);
   stage1.SelectProfileSlot(1,0);
   stage2.SelectProfileSlot(1,0);
   stage3.SelectProfileSlot(1,0);

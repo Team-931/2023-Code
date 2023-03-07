@@ -43,6 +43,7 @@ void DriveTrain::SetV(double linX, double linY, double rot, double throttle,
 
 void DriveTrain::Periodic() {
   // Implementation of subsystem periodic method goes here.
+    frc::SmartDashboard::PutNumber("inches driven", GetDistance());
 }
 
 void DriveTrain::SimulationPeriodic() {
@@ -61,6 +62,7 @@ SwerveModule::SwerveModule()
   AddChild("absAngle", &absAngle);
   ++ix;
   turn.ConfigSelectedFeedbackSensor(FeedbackDevice::IntegratedSensor);
+  drive.ConfigSelectedFeedbackSensor(FeedbackDevice::IntegratedSensor);
   turn.SetNeutralMode(NeutralMode::Coast);
   // does this work?
       turn.ConfigIntegratedSensorInitializationStrategy(SensorInitializationStrategy::BootToAbsolutePosition);
@@ -130,6 +132,15 @@ void SwerveModule::Init() {
   turn.SetSelectedSensorPosition(
       ticksPerRotation *
       (absSubtraction[index] / 4096. - absAngle.GetAbsolutePosition()));
+  drive.SetSelectedSensorPosition(0);
+}
+
+double DriveTrain::GetDistance(int wheelIx) {
+  return wheels[wheelIx].GetDistance();
+}
+
+double SwerveModule::GetDistance() {
+  return drive.GetSelectedSensorPosition() * inPerTick;
 }
 
 void SwerveModule::SimulationPeriodic() {
