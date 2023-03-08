@@ -101,7 +101,7 @@ struct DrvbyStick
       // Operator Inputs
       double x = joy.GetLeftY();
       bool intake_cone = x > .3;// ?? Pulling back
-      bool intake_cube = x < .3;// ?? Pushing fwd
+      bool intake_cube = x < -.3;// ?? Pushing fwd
 
       // State update logic
       if (intake_cone) 
