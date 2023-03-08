@@ -34,7 +34,7 @@ const double TURRET_SPEED_DEADZONE = 0.2;
 namespace Constants {
 using std::numbers::pi;
 namespace RobotContainer {
-constexpr double minThrottle = .1;
+constexpr double minThrottle = .1, maxThrottle = .75, baseThrottle = .3, stickError = .05;
 }
 namespace DriveTrain {
 constexpr int drvnum[]{1, 4, 7, 2}, trnnum[]{0, 5, 6, 3},

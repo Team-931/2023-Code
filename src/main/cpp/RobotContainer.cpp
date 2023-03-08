@@ -109,11 +109,19 @@ double RobotContainer::GetRot() {
   return drivestickJ.GetTwist();
 }
 
-double RobotContainer::GetThrottle() {
-  if (XBox)
-    return (minThrottle +
-            driverstick.GetRightTriggerAxis() * (1 - minThrottle));
-  return (1 + minThrottle - drivestickJ.GetThrottle() * (1 - minThrottle)) / 2;
+double RobotContainer::GetThrottle() {//todo more!!
+  if (XBox) {
+    double lefTrig = driverstick.GetLeftTriggerAxis(),
+           righTrig = driverstick.GetRightTriggerAxis();
+    if (lefTrig < stickError)
+      return baseThrottle +
+            righTrig * (maxThrottle - baseThrottle);
+    else
+    if (righTrig < stickError)
+      return baseThrottle + lefTrig * (minThrottle - baseThrottle);
+    else return baseThrottle;
+  }
+  return (maxThrottle + minThrottle - drivestickJ.GetThrottle() * (maxThrottle - minThrottle)) / 2;
 }
 # ifdef FdCtrTog
 bool RobotContainer::GetFieldCenterToggle() {
