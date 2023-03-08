@@ -43,7 +43,7 @@ void DriveTrain::SetV(double linX, double linY, double rot, double throttle,
 
 void DriveTrain::Periodic() {
   // Implementation of subsystem periodic method goes here.
-    frc::SmartDashboard::PutNumber("inches driven", GetDistance());
+    frc::SmartDashboard::PutNumber("inches driven", GetDistance().value());
 }
 
 void DriveTrain::SimulationPeriodic() {
@@ -135,11 +135,11 @@ void SwerveModule::Init() {
   drive.SetSelectedSensorPosition(0);
 }
 
-double DriveTrain::GetDistance(int wheelIx) {
+units::inch_t DriveTrain::GetDistance(int wheelIx) {
   return wheels[wheelIx].GetDistance();
 }
 
-double SwerveModule::GetDistance() {
+units::inch_t SwerveModule::GetDistance() {
   return drive.GetSelectedSensorPosition() * inPerTick;
 }
 

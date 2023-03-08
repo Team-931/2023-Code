@@ -22,7 +22,7 @@ class AutoDrive
    *
    * @param subsystem The subsystem used by this command.
    */
-  AutoDrive(DriveTrain& subsystem, double fwdDist, double leftDist, double motorPwr);
+  AutoDrive(DriveTrain& subsystem, units::inch_t fwdDist, units::inch_t leftDist, double motorPwr);
 
   void Initialize() override;
 
@@ -31,5 +31,6 @@ class AutoDrive
 
  private:
   DriveTrain& drive;
-  double startEnc, x, y, dist1;
+  double x, y;
+  units::inch_t startEnc, dist1;
 };

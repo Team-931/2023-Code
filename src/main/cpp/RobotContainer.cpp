@@ -99,7 +99,7 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
     IntCtl(intake, CubeIn),
     testarmraise(arm, openInFront),
     testarmraise(arm, foldedDown, 1_s),
-    AutoDrive(drivetrain, -12*5, 0, .1)
+    AutoDrive(drivetrain, -5_ft, 0_ft, .1)
     );
   }
   return &m_autonomousCommand;
