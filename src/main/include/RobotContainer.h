@@ -99,12 +99,13 @@ struct DrvbyStick
       frc::SmartDashboard::PutBoolean("intake_deployed", intake_deployed);
 
       // Operator Inputs
-      bool intake_cone = joy.GetRightBumper();
-      bool intake_cube = joy.GetLeftBumper();
+      double x = joy.GetLeftY();
+      bool intake_cone = x > .3;// ?? Pulling back
+      bool intake_cube = x < .3;// ?? Pushing fwd
 
       // State update logic
       if (intake_cone) 
-        if (intake_cube) intake_deployed = CubeShoot;
+        if (intake_cube) intake_deployed = CubeShoot;//can't happen now!!
         else intake_deployed = ConeIn;
       else 
         if (intake_cube) intake_deployed = CubeIn;

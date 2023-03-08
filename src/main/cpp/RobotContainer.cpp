@@ -193,44 +193,39 @@ void RobotContainer::TurbyStick::Execute() {
     it.SetMotors(0, 0, 0);
     return;
     }
- // double x = joy.GetLeftX(), y = joy.GetRightX();
-  //if (joy.GetAButtonPressed()) setPos = ! setPos;
-  //if (joy.GetLeftStickButtonPressed()) hold = ! hold;
   if (joy.GetAButtonPressed()) {
-    if (joy.GetLeftStickButton()) it.SetAngles(openInBack);
-    else it.SetAngles(openInFront);
+    it.SetAngles(openInFront);
     setPos = true;
   }
-  if (joy.GetRightStickButtonPressed()) {
+  if (joy.GetRightBumperPressed()) {
     it.SetAngles(foldedDown);
     setPos = true;
   }
-  if (joy.GetBackButtonPressed()) {
+  if (joy.GetYButtonPressed()) {
     it.SetAngles(highPost);
     setPos = true;
   }
-  if (joy.GetStartButtonPressed()) {
-    if (joy.GetLeftStickButton()) it.SetAngles(lowPostBack);
-    else it.SetAngles(lowPost);
+  if (joy.GetXButtonPressed()) {
+    it.SetAngles(lowPost);
     setPos = true;
   }
   if (joy.GetBButtonPressed()) {
     it.SetAngles(conePickup1);
     setPos = true;
   }
-  if (joy.GetBButton() && joy.GetRightBumperPressed()) {
-    it.SetAngles(conePickup2);
+  {
+  int pov = joy.GetPOV();
+    if (pov == 180) {
+    it.SetAngles(openInBack);
     setPos = true;
   }
-  if (joy.GetXButtonPressed()) {
-    it.SetAngles(cubePickup1);
+    if (pov == 90) {
+    it.SetAngles(lowPostBack);
     setPos = true;
   }
-  if (joy.GetXButton() && joy.GetLeftBumperPressed()) {
-    it.SetAngles(cubePickup2);
-    setPos = true;
+
   }
-  if (joy.GetYButton() && joy.GetRightBumperPressed()) {
+  /* if (joy.GetYButton() && joy.GetRightBumperPressed()) {
     it.SetAngles(coneOnFloor);
     setPos = true;
   }
@@ -238,7 +233,8 @@ void RobotContainer::TurbyStick::Execute() {
     it.SetAngles(cubeOnFloor);
     setPos = true;
   }
-   /*  x /= 10; y /= 10;
+ */ double y = joy.GetRightY();
+    /*  x /= 10; y /= 10;
     if (joy.GetXButton()){
       it.SetVeloc(x, 0, 0);
       setPos = false;
@@ -250,8 +246,12 @@ void RobotContainer::TurbyStick::Execute() {
     else if (joy.GetBButton()){
       it.SetVeloc(0, 0, x);
       setPos = false;
+    } */
+    if (abs(y) >= stickError) {
+      it.HoldStill(y*.02 /*ms*/ * 2 / (2*pi*len3));
+      setPos = true;
     }
-    else*/ if (setPos == false) {
+    else if (setPos == false) {
       it.HoldStill();
       setPos = true;
     }

@@ -108,11 +108,11 @@ bool Arm::AtSetpoint(const double (&angles)[3]) {
          (abs(deg3 * 360 - angles[2]) <= tolerance);
 }
 
-void Arm::HoldStill() {
+void Arm::HoldStill(double mov3 /*portion of circle*/) {
   double deg1 = stage1.GetSelectedSensorPosition() / ticksPerRotation / gear1to2,
        deg2 = stage2.GetSelectedSensorPosition() / ticksPerRotation - deg1, 
        deg3 = stage3.GetSelectedSensorPosition() / ticksPerRotation - deg2;
-  SetAngles(360*deg1, 360*deg2, 360*deg3);
+  SetAngles(360*deg1, 360*deg2, 360*(deg3 + mov3));
 }
 
 void Arm::SetVeloc(double vel1, double vel2, double vel3) {

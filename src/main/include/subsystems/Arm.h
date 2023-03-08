@@ -18,7 +18,7 @@ class Arm : public frc2::SubsystemBase {
   bool AtSetpoint(const double (&angles)[3]);
   void SetVeloc(double stage1RotPerSec, double stage2RotPerSec, double stage3RotPerSec); 
   void SetLinVeloc(double fwdInPerSec, double upInPerSec, double stage3DegreesPerSec);
-  void HoldStill();
+  void HoldStill(double mov3 = 0);
   void SetMotors(double st1, double st2, double st3){
     stage1.Set(st1); stage2.Set(st2); stage3.Set(st3);// testing only
   }
