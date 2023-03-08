@@ -8,6 +8,7 @@
 #include <ctre/Phoenix.h>
 #include <frc/DutyCycleEncoder.h>
 #include <frc2/command/SubsystemBase.h>
+#include <units/length.h>
 
 /**
  * All the control objects for a single wheel. Initialized with an index to Id.
@@ -38,7 +39,7 @@ class SwerveModule : public frc2::SubsystemBase {
    * simulation.
    */
   void SimulationPeriodic() override;
-  double GetDistance();
+  units::inch_t GetDistance();
 
  private:
   // Components (e.g. motor controllers and sensors) should generally be
@@ -84,7 +85,7 @@ class DriveTrain : public frc2::SubsystemBase {
    * simulation.
    */
   void SimulationPeriodic() override;
-  double GetDistance(int wheelIx=0);
+  units::inch_t GetDistance(int wheelIx=0);
 
  private:
   // Components (e.g. motor controllers and sensors) should generally be

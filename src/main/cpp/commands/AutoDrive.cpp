@@ -1,12 +1,13 @@
 # include "commands/AutoDrive.h"
+# include <units/math.h>
 
-AutoDrive::AutoDrive(DriveTrain &subsystem, double fwd, double left, double motorPwr) : drive(subsystem)
+AutoDrive::AutoDrive(DriveTrain &subsystem, units::inch_t fwd, units::inch_t left, double motorPwr) : drive(subsystem)
 {
     AddRequirements(&drive);
-    dist1 = sqrt(fwd*fwd + left*left);
-    motorPwr /= dist1;
-    x = fwd * motorPwr;
-    y = left * motorPwr;
+    dist1 = units::math::sqrt(fwd*fwd + left*left);
+    auto mP = motorPwr / dist1;
+    x = fwd * mP;
+    y = left * mP;
 }
 
 void AutoDrive::Initialize()
@@ -21,5 +22,5 @@ void AutoDrive::Execute()
 
 bool AutoDrive::IsFinished()
 {
-    return abs(startEnc - drive.GetDistance()) >= dist1;
+    return units::math::abs(startEnc - drive.GetDistance()) >= dist1;
 }

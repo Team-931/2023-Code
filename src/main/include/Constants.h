@@ -5,6 +5,7 @@
 #pragma once
 #include <numbers>
 #include <cmath>
+#include <units/length.h>
 /**
  * The Constants header provides a convenient place for teams to hold robot-wide
  * numerical or boolean constants.  This should not be used for any other
@@ -56,7 +57,8 @@ constexpr int absSubtraction[]{2220, 2148, 2695, 1023};  // to align the wheels
 constexpr double perSecond = 4, // inversely proportional to the intended response time
                 maxVel = perSecond * velPerRPS, maxAccel = perSecond * perSecond * velPerRPS;//for Motion Magic
 constexpr double CtlP = 0.1, CtlF = 0.25*2048/maxAccel;//for PID
-constexpr double driveGearing = 6.55, wheelDiam = 4/*in*/, 
+constexpr double driveGearing = 6.55;
+constexpr units::inch_t wheelDiam = 4_in, 
                 inPerTick = wheelDiam * pi / driveGearing / 2048;
 }  // namespace DriveTrain
 
