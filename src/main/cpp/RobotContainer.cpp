@@ -25,6 +25,10 @@ RobotContainer::RobotContainer()
 
 void RobotContainer::Init() {
   drivetrain.Init();
+  autoChooser.SetDefaultOption("do nothing", 0);
+  autoChooser.AddOption("move 5 ft", 1);//to do: change to 17 ft
+  autoChooser.AddOption("score and back 5 ft", 2);
+  frc::SmartDashboard::PutData(&autoChooser);
   if (frc::DriverStation::GetJoystickIsXbox(0)) XBox = true;
 }
 
@@ -84,13 +88,20 @@ void RobotContainer::ConfigureButtonBindings() {
 
 frc2::Command* RobotContainer::GetAutonomousCommand() {
   // An example command will be run in autonomous
-  if(1) return new frc2::SequentialCommandGroup (
+  switch (autoChooser.GetSelected()) {
+  case 0: return 0;
+  case 1:
+   return new AutoDrive(drivetrain, 12*5, 0, .3);
+  case 2:
+   return new frc2::SequentialCommandGroup (
     testarmraise(arm, openInFront),
     testarmraise(arm, lowPost),
     IntCtl(intake, CubeIn),
+    testarmraise(arm, openInFront),
     testarmraise(arm, foldedDown, 1_s),
     AutoDrive(drivetrain, -12*5, 0, .1)
     );
+  }
   return &m_autonomousCommand;
 }
 
@@ -201,6 +212,10 @@ void RobotContainer::TurbyStick::Execute() {
     it.SetAngles(foldedDown);
     setPos = true;
   }
+  if (joy.GetLeftBumperPressed()) {
+    it.SetAngles(coneOnFloor);
+    setPos = true;
+  }
   if (joy.GetYButtonPressed()) {
     it.SetAngles(highPost);
     setPos = true;
@@ -221,6 +236,10 @@ void RobotContainer::TurbyStick::Execute() {
   }
     if (pov == 90) {
     it.SetAngles(lowPostBack);
+    setPos = true;
+  }
+    if (pov == 270) {
+    it.SetAngles(coneOnFloorBack1);
     setPos = true;
   }
 

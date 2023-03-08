@@ -7,6 +7,7 @@
 #include <frc/Joystick.h>
 #include <frc/XboxController.h>  //this is the file containing connection to xbox controller
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <frc/smartdashboard/SendableChooser.h>
 #include <frc2/command/Command.h>
 
 #include "commands/ExampleCommand.h"
@@ -14,13 +15,6 @@
 #include "subsystems/Intake.h"
 #include "subsystems/Arm.h"
 #include "Constants.h"
-
-#define BALLEVATOR_IDLE 0
-#define BALLEVATOR_READY 1
-#define BALLEVATOR_LOADING 2
-#define BALLEVATOR_HOLD 3
-#define BALLEVATOR_FIRE 4
-#define BALLEVATOR_REVERSE 5
 
 
 /* HACK(wgd): This should probably live somewhere more 'utilities-ish'
@@ -62,6 +56,7 @@ bool GetFieldCenterToggle();
   DriveTrain drivetrain;
   Arm arm;
   bool XBox{false};
+  frc::SendableChooser<int> autoChooser;
   ExampleCommand m_autonomousCommand;
 
   void ConfigureButtonBindings();
