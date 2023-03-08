@@ -267,7 +267,7 @@ void RobotContainer::TurbyStick::Execute() {
       setPos = false;
     } */
     if (abs(y) >= stickError) {
-      it.HoldStill(-y*.02 /*ms*/ * 20 / (2*pi*len3));
+      it.HoldStill(-y*.02 /*ms*/ * 40 / (2*pi*len3));
       setPos = true;
     }
     else if (setPos == false) {
