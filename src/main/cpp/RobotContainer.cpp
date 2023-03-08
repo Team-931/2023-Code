@@ -91,7 +91,7 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
   switch (autoChooser.GetSelected()) {
   case 0: return 0;
   case 1:
-   return new AutoDrive(drivetrain, 12*5, 0, .3);
+   return new AutoDrive(drivetrain, 5_ft, 0_ft, .3);
   case 2:
    return new frc2::SequentialCommandGroup (
     testarmraise(arm, openInFront),
