@@ -26,8 +26,8 @@ RobotContainer::RobotContainer()
 void RobotContainer::Init() {
   drivetrain.Init();
   autoChooser.SetDefaultOption("do nothing", 0);
-  autoChooser.AddOption("move 5 ft", 1);//to do: change to 17 ft
-  autoChooser.AddOption("score and back 5 ft", 2);
+  autoChooser.AddOption("move 16.5 ft", 1);
+  autoChooser.AddOption("score and back 16.5 ft", 2);
   frc::SmartDashboard::PutData(&autoChooser);
   if (frc::DriverStation::GetJoystickIsXbox(0)) XBox = true;
 }
@@ -91,7 +91,7 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
   switch (autoChooser.GetSelected()) {
   case 0: return 0;
   case 1:
-   return new AutoDrive(drivetrain, 5_ft, 0_ft, .3);
+   return new AutoDrive(drivetrain, 16.5_ft, 0_ft, .3);
   case 2:
    return new frc2::SequentialCommandGroup (
     testarmraise(arm, openInFront),
@@ -99,7 +99,7 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
     IntCtl(intake, CubeIn),
     testarmraise(arm, openInFront),
     testarmraise(arm, foldedDown, 1_s),
-    AutoDrive(drivetrain, -5_ft, 0_ft, .1)
+    AutoDrive(drivetrain, -16.5_ft, 0_ft, .3)
     );
   }
   return &m_autonomousCommand;
