@@ -65,9 +65,9 @@ SwerveModule::SwerveModule()
   drive.ConfigSelectedFeedbackSensor(FeedbackDevice::IntegratedSensor);
   turn.SetNeutralMode(NeutralMode::Coast);
   // does this work?
-      turn.ConfigIntegratedSensorInitializationStrategy(SensorInitializationStrategy::BootToAbsolutePosition);
-      turn.ConfigIntegratedSensorAbsoluteRange(AbsoluteSensorRange::Signed_PlusMinus180);
-      // set PID
+  turn.ConfigIntegratedSensorInitializationStrategy(SensorInitializationStrategy::BootToAbsolutePosition);
+  turn.ConfigIntegratedSensorAbsoluteRange(AbsoluteSensorRange::Signed_PlusMinus180);
+  // set PID
   turn.Config_kP(0, CtlP);
   turn.Config_kF(0, CtlF);
   turn.ConfigMotionCruiseVelocity(maxVel);
@@ -90,7 +90,7 @@ double SwerveModule::SetV(double linX, double linY, double rot) {
     return 0;
   }
   double spd = speed = std::sqrt(linX * linX + linY * linY),
-         ang = -std::atan2(linY, linX);//this is a kludge
+         ang = -std::atan2(linY, linX); // this is a kludge
   // this puts angle into same semicircle as its old value,
   // equivalent to adding or subtracting multiples of 180 degrees to ang to keep
   // it as close to angle as possible. Note that if we change ang by an odd

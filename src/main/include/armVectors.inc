@@ -1,24 +1,23 @@
-constexpr
-double  lowPost[] = {21, 46, 111},
-        lowPostBack[] = {-95, 300, 37},
-        lowCubeBack[] = {-81, 286, 56},
+constexpr double lowPost[] = {21, 46, 111}, 
+                 lowPostBack[] = {-95, 300, 37},
+                 lowCubeBack[] = {-81, 286, 56},
 
-        highPost[] = {72, 48, 106},
-        highCubeBack[] = {-93, 304, -11.5},
-        
-        openInFront[] = {35, 30, 224},
-        openInBack[] = {-63, 125, 224},
-        foldedDown[] = {-19, 125, 224},
-        
-        conePickup1[] = {57,25,86},
-        conePickup2[] = {57,26,85},
-        cubePickup1[] = {50,49,108},
-        cubePickup2[] = {50,50,109},
-        coneOnFloor[] = {-11.5,121,97.5},
-        coneOnFloorBack1[] = {-35, 282, 55},
-        coneOnFloorBack2[] = {-32, 275, 57},
-        cubeOnFloorBack[] = {-50, 244, 43},
-        cubeOnFloor[] = {-11.5,120,71};
+                 highPost[] = {72, 48, 130},
+                 highCubeBack[] = {-93, 304, -11.5},
+
+                 openInFront[] = {35, 30, 224},
+                 openInBack[] = {-63, 125, 224},
+                 foldedDown[] = {-19, 125, 224},
+
+                 conePickup1[] = {57, 25, 130},
+                 conePickup2[] = {57, 26, 85},
+                 cubePickup1[] = {50, 49, 108},
+                 cubePickup2[] = {50, 50, 109},
+                 coneOnFloor[] = {-11.5, 121, 97.5},
+                 coneOnFloorBack1[] = {-35, 282, 55},
+                 coneOnFloorBack2[] = {-32, 275, 57},
+                 cubeOnFloorBack[] = {-50, 244, 43},
+                 cubeOnFloor[] = {-11.5, 120, 95};
 
 using Constants::Arm::ht, Constants::Arm::len1, Constants::Arm::len2, Constants::Arm::len3;
 using Constants::pi;

@@ -4,7 +4,7 @@
 AutoDrive::AutoDrive(DriveTrain &subsystem, units::inch_t fwd, units::inch_t left, double motorPwr) : drive(subsystem)
 {
     AddRequirements(&drive);
-    dist1 = units::math::sqrt(fwd*fwd + left*left);
+    dist1 = units::math::sqrt(fwd * fwd + left * left);
     auto mP = motorPwr / dist1;
     x = fwd * mP;
     y = left * mP;

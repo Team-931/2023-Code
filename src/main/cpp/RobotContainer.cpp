@@ -10,7 +10,7 @@
 #include "Constants.h"
 using namespace Constants::RobotContainer;
 
-# include "commands/AutoDrive.h"
+#include "commands/AutoDrive.h"
 
 RobotContainer::RobotContainer()
     : m_autonomousCommand(&intake), drivebyStick(drivetrain, *this) {
@@ -29,7 +29,8 @@ void RobotContainer::Init() {
   autoChooser.AddOption("move 16.5 ft", 1);
   autoChooser.AddOption("score and back 16.5 ft", 2);
   frc::SmartDashboard::PutData(&autoChooser);
-  if (frc::DriverStation::GetJoystickIsXbox(0)) XBox = true;
+  if (frc::DriverStation::GetJoystickIsXbox(0))
+    XBox = true;
 }
 
 # include "armVectors.inc"
@@ -51,7 +52,7 @@ class testarmraise : public /* frc2::CommandHelper< */frc2::WaitCommand/* , test
    Arm& arm;
    const double (&angs)[3];
    int timesInRange = 0;
-   static const int minTimesInRange =  10;
+   static const int minTimesInRange = 10;
 };
 
 void testarmraise::Execute() {
@@ -91,15 +92,15 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
   switch (autoChooser.GetSelected()) {
   case 0: return 0;
   case 1:
-   return new AutoDrive(drivetrain, 16.5_ft, 0_ft, .3);
+   return new AutoDrive(drivetrain, 13_ft, 0_ft, .3);
   case 2:
-   return new frc2::SequentialCommandGroup (
+   return new frc2::SequentialCommandGroup(
     testarmraise(arm, openInFront),
-    testarmraise(arm, lowPost),
-    IntCtl(intake, CubeIn),
+    testarmraise(arm, highPost),
+    IntCtl(intake, ConeIn),
     testarmraise(arm, openInFront),
     testarmraise(arm, foldedDown, 1_s),
-    AutoDrive(drivetrain, -16.5_ft, 0_ft, .3)
+    AutoDrive(drivetrain, -13_ft, 0_ft, .3)
     );
   }
   return &m_autonomousCommand;
@@ -120,7 +121,7 @@ double RobotContainer::GetRot() {
   return drivestickJ.GetTwist();
 }
 
-double RobotContainer::GetThrottle() {//todo more!!
+double RobotContainer::GetThrottle() {
   if (XBox) {
     double lefTrig = driverstick.GetLeftTriggerAxis(),
            righTrig = driverstick.GetRightTriggerAxis();
@@ -144,7 +145,7 @@ bool RobotContainer::GetZeroYaw() {
   if (XBox) return driverstick.GetAButtonReleased();
   return drivestickJ.GetTopReleased();
 }
-  // Values determined empirically by wiggling the joystick
+// Values determined empirically by wiggling the joystick
 // around. If you find that it tends to "stick" when released
 // or jolt around unexpectedly, you may need to increase these.
 const double JOYSTICK_MOTION_DEADZONE = 0.1;
@@ -180,8 +181,8 @@ void RobotContainer::DrvbyStick::Execute() {
       if (bot.GetZeroYaw()) it.ZeroYaw();
       // todo: add throttle
   double linX = -bot.GetX(),
-        linY = bot.GetY(),
-        rot = bot.GetRot();
+         linY = bot.GetY(),
+         rot = bot.GetRot();
   // Dead zones
   linX = CalculateDeadZone(JOYSTICK_MOTION_DEADZONE, linX);
   linY = CalculateDeadZone(JOYSTICK_MOTION_DEADZONE, linY);
@@ -191,19 +192,19 @@ void RobotContainer::DrvbyStick::Execute() {
   linX = QuadraticScaling(linX);
   linY = QuadraticScaling(linY);
   rot = QuadraticScaling(rot);
-      it.SetV(linX, linY, rot, bot.GetThrottle(),
-              fieldcentered);
-    }
+  it.SetV(linX, linY, rot, bot.GetThrottle(),
+          fieldcentered);
+}
 
 void RobotContainer::TurbyStick::Execute() {
-  if (frc::DriverStation::IsDisabled()){
+  if (frc::DriverStation::IsDisabled()) {
     setPos = false;
     joy.GetAButtonPressed();
     joy.GetBackButtonPressed();
     joy.GetStartButtonPressed();
     it.SetMotors(0, 0, 0);
     return;
-    }
+  }
   if (joy.GetAButtonPressed()) {
     it.SetAngles(openInFront);
     setPos = true;
@@ -213,7 +214,7 @@ void RobotContainer::TurbyStick::Execute() {
     setPos = true;
   }
   if (joy.GetLeftBumperPressed()) {
-    it.SetAngles(coneOnFloor);
+    it.SetAngles(cubeOnFloor);
     setPos = true;
   }
   if (joy.GetYButtonPressed()) {
@@ -229,20 +230,19 @@ void RobotContainer::TurbyStick::Execute() {
     setPos = true;
   }
   {
-  int pov = joy.GetPOV();
+    int pov = joy.GetPOV();
     if (pov == 180) {
-    it.SetAngles(openInBack);
-    setPos = true;
-  }
+      it.SetAngles(openInBack);
+      setPos = true;
+    }
     if (pov == 90) {
-    it.SetAngles(lowPostBack);
-    setPos = true;
-  }
+      it.SetAngles(lowPostBack);
+      setPos = true;
+    }
     if (pov == 270) {
-    it.SetAngles(coneOnFloorBack1);
-    setPos = true;
-  }
-
+      it.SetAngles(coneOnFloorBack1);
+      setPos = true;
+    }
   }
   /* if (joy.GetYButton() && joy.GetRightBumperPressed()) {
     it.SetAngles(coneOnFloor);
@@ -252,22 +252,23 @@ void RobotContainer::TurbyStick::Execute() {
     it.SetAngles(cubeOnFloor);
     setPos = true;
   }
- */ double y = joy.GetRightY();
+ */
+  double y = joy.GetRightY();
     /*  x /= 10; y /= 10;
     if (joy.GetXButton()){
       it.SetVeloc(x, 0, 0);
       setPos = false;
-    }    
+    }
     else if (joy.GetYButton()){
       it.SetVeloc(0, x, 0);
       setPos = false;
-    }    
+    }
     else if (joy.GetBButton()){
       it.SetVeloc(0, 0, x);
       setPos = false;
     } */
     if (abs(y) >= stickError) {
-      it.HoldStill(-y*.02 /*ms*/ * 40 / (2*pi*len3));
+      it.HoldStill(-y * .02 /*ms*/ * 40 / (2 * pi * len3));
       setPos = true;
     }
     else if (setPos == false) {

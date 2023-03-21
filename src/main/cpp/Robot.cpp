@@ -6,8 +6,13 @@
 
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/CommandScheduler.h>
+#include <cameraserver/CameraServer.h>
 
-void Robot::RobotInit() {}
+void Robot::RobotInit() {
+  frc::CameraServer::StartAutomaticCapture();
+  m_container.Init(); // setting the encoders based on absolute readings: does
+                      // it work here?
+}
 
 /**
  * This function is called every 20 ms, no matter the mode. Use
@@ -39,8 +44,8 @@ void Robot::AutonomousInit() {
     m_autonomousCommand->Schedule();
   }
 
-  m_container.Init();  // setting the encoders based on absolute readings: does
-                       // it work here?
+  m_container.Init(); // setting the encoders based on absolute readings: does
+                      // it work here?
 }
 
 void Robot::AutonomousPeriodic() {}
@@ -55,8 +60,8 @@ void Robot::TeleopInit() {
     m_autonomousCommand = nullptr;
   }
 
-  m_container.Init();  // setting the encoders based on absolute readings: does
-                       // it work here?
+  m_container.Init(); // setting the encoders based on absolute readings: does
+                      // it work here?
 }
 
 /**
@@ -80,5 +85,7 @@ void Robot::SimulationInit() {}
 void Robot::SimulationPeriodic() {}
 
 #ifndef RUNNING_FRC_TESTS
-int main() { return frc::StartRobot<Robot>(); }
+int main() {
+  return frc::StartRobot<Robot>();
+}
 #endif
