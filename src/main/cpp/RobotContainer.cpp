@@ -23,8 +23,10 @@ RobotContainer::RobotContainer()
   intake.SetDefaultCommand(Intakebystick);
 }
 
-void RobotContainer::Init() {
+void RobotContainer::InitAlign() {
   drivetrain.Init();
+}
+void RobotContainer::Init() {
   autoChooser.SetDefaultOption("do nothing", 0);
   autoChooser.AddOption("move 16.5 ft", 1);
   autoChooser.AddOption("score and back 16.5 ft", 2);
