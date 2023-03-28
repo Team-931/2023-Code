@@ -10,8 +10,7 @@
 
 void Robot::RobotInit() {
   frc::CameraServer::StartAutomaticCapture();
-  m_container.Init(); // setting the encoders based on absolute readings: does
-                      // it work here?
+  m_container.Init(); // Auto select . . .
 }
 
 /**
@@ -44,7 +43,7 @@ void Robot::AutonomousInit() {
     m_autonomousCommand->Schedule();
   }
 
-  m_container.Init(); // setting the encoders based on absolute readings: does
+  m_container.InitAlign(); // setting the encoders based on absolute readings: does
                       // it work here?
 }
 
@@ -60,7 +59,7 @@ void Robot::TeleopInit() {
     m_autonomousCommand = nullptr;
   }
 
-  m_container.Init(); // setting the encoders based on absolute readings: does
+  m_container.InitAlign(); // setting the encoders based on absolute readings: does
                       // it work here?
 }
 

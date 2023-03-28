@@ -34,6 +34,8 @@ class RobotContainer {
 
   void Init();
 
+  void InitAlign();
+
   frc2::Command* GetAutonomousCommand();
 
   // get forward/back from the selected joystick in our coords
