@@ -139,8 +139,8 @@ double RobotContainer::GetThrottle() {
 }
 # ifdef FdCtrTog
 bool RobotContainer::GetFieldCenterToggle() {
-  if (XBox) return driverstick.GetRightBumper();
-  return drivestickJ.GetTrigger();
+  if (XBox) return driverstick.GetRightBumperPressed();
+  return drivestickJ.GetTriggerPressed();
 }
 # endif
 bool RobotContainer::GetZeroYaw() {
