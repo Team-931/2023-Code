@@ -78,7 +78,7 @@ namespace Constants {
                          gravCompensator = 9.81 /*metric gravity*/ /
                                            39.37 /*inch/meter*/ / 2.205 /*lb/kg*/
                                            / 4.69 /*stall torque*/ / gearing,
-                         gear1to2 = 2. * 24 / 22;
+                         gear1to2 = 2. * 24 / 22 * 80 / 36;
         constexpr double ht = 40, len1 = 24, len2 = 21, len3 = 19;
         constexpr double momentStage1 = len1 /*in*/ * 14.5 /*lb*/, nAngleStage1 = 0 / 360,
                          momentStage2 = len2 /*in*/ * 9.3 /*lb*/, nAngleStage2 = -0 / 360,
