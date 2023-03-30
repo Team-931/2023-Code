@@ -139,13 +139,13 @@ double RobotContainer::GetThrottle() {
 }
 # ifdef FdCtrTog
 bool RobotContainer::GetFieldCenterToggle() {
-  if (XBox) return driverstick.GetRightBumperPressed();
-  return drivestickJ.GetTriggerPressed();
+  if (XBox) return driverstick.GetRightBumper();
+  return drivestickJ.GetTrigger();
 }
 # endif
 bool RobotContainer::GetZeroYaw() {
-  if (XBox) return driverstick.GetAButtonReleased();
-  return drivestickJ.GetTopReleased();
+  if (XBox) return driverstick.GetAButton();
+  return drivestickJ.GetTop();
 }
 // Values determined empirically by wiggling the joystick
 // around. If you find that it tends to "stick" when released
@@ -201,33 +201,30 @@ void RobotContainer::DrvbyStick::Execute() {
 void RobotContainer::TurbyStick::Execute() {
   if (frc::DriverStation::IsDisabled()) {
     setPos = false;
-    joy.GetAButtonPressed();
-    joy.GetBackButtonPressed();
-    joy.GetStartButtonPressed();
     it.SetMotors(0, 0, 0);
     return;
   }
-  if (joy.GetAButtonPressed()) {
+  if (joy.GetAButton()) {
     it.SetAngles(openInFront);
     setPos = true;
   }
-  if (joy.GetRightBumperPressed()) {
+  if (joy.GetRightBumper()) {
     it.SetAngles(foldedDown);
     setPos = true;
   }
-  if (joy.GetLeftBumperPressed()) {
+  if (joy.GetLeftBumper()) {
     it.SetAngles(cubeOnFloor);
     setPos = true;
   }
-  if (joy.GetYButtonPressed()) {
+  if (joy.GetYButton()) {
     it.SetAngles(highPost);
     setPos = true;
   }
-  if (joy.GetXButtonPressed()) {
+  if (joy.GetXButton()) {
     it.SetAngles(lowPost);
     setPos = true;
   }
-  if (joy.GetBButtonPressed()) {
+  if (joy.GetBButton()) {
     it.SetAngles(conePickup1);
     setPos = true;
   }
@@ -246,11 +243,11 @@ void RobotContainer::TurbyStick::Execute() {
       setPos = true;
     }
   }
-  /* if (joy.GetYButton() && joy.GetRightBumperPressed()) {
+  /* if (joy.GetYButton() && joy.GetRightBumper()) {
     it.SetAngles(coneOnFloor);
     setPos = true;
   }
-  if (joy.GetYButton() && joy.GetLeftBumperPressed()) {
+  if (joy.GetYButton() && joy.GetLeftBumper()) {
     it.SetAngles(cubeOnFloor);
     setPos = true;
   }
