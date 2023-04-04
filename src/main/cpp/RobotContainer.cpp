@@ -30,9 +30,17 @@ void RobotContainer::Init() {
   autoChooser.SetDefaultOption("do nothing", 0);
   autoChooser.AddOption("move 16.5 ft", 1);
   autoChooser.AddOption("score and back 16.5 ft", 2);
+  autoChooser.AddOption("play reveille", 4);
   frc::SmartDashboard::PutData(&autoChooser);
   if (frc::DriverStation::GetJoystickIsXbox(0))
     XBox = true;
+}
+
+struct PlayCommand : frc2::WaitCommand {
+  PlayCommand() : frc2::WaitCommand (1_s) {}
+  void Initialize() override {
+    DriveTrain::PlayMusic();
+  }
 }
 
 # include "armVectors.inc"
@@ -104,6 +112,8 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
     testarmraise(arm, foldedDown, 1_s),
     AutoDrive(drivetrain, -13_ft, 0_ft, .3)
     );
+  case 4:
+   return new PlayCommand;
   }
   return &m_autonomousCommand;
 }

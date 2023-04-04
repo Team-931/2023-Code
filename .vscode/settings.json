@@ -20,7 +20,8 @@
     "cmath": "cpp",
     "complex": "cpp",
     "*.tcc": "cpp",
-    "*.inc": "cpp"
+    "*.inc": "cpp",
+    "new": "cpp"
   },
   "wpilib.autoStartRioLog": false
 }

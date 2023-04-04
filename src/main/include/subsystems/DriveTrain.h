@@ -80,6 +80,8 @@ class DriveTrain : public frc2::SubsystemBase {
 
   void Init();
 
+  static void PlayMusic();
+
   /**
    * Will be called periodically whenever the CommandScheduler runs during
    * simulation.

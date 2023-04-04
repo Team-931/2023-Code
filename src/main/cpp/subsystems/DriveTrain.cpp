@@ -125,9 +125,11 @@ void SwerveModule::Periodic() {
 }
 void DriveTrain::Init() {
   for (auto& wheel : wheels) wheel.Init();
-  //symph.Play();
 }
 
+void::DriveTrain::PlayMusic() {
+    symph.Play();
+}
 void SwerveModule::Init() {
   turn.SetSelectedSensorPosition(
       ticksPerRotation *
