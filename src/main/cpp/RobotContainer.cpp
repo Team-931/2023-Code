@@ -25,20 +25,22 @@ RobotContainer::RobotContainer()
 
 void RobotContainer::InitAlign() {
   drivetrain.Init();
-}
-void RobotContainer::Init() {
-  autoChooser.SetDefaultOption("do nothing", 0);
-  autoChooser.AddOption("move 16.5 ft", 1);
-  autoChooser.AddOption("score and back 16.5 ft", 2);
-  autoChooser.AddOption("play reveille", 4);
-  frc::SmartDashboard::PutData(&autoChooser);
   if (frc::DriverStation::GetJoystickIsXbox(0))
     XBox = true;
 }
+void RobotContainer::Init() {
+  autoChooser.SetDefaultOption("do nothing", 0);
+  autoChooser.AddOption("move 13.5 ft", 1);
+  autoChooser.AddOption("score and back 13.5 ft", 2);
+  autoChooser.AddOption("play reveille", 4);
+  frc::SmartDashboard::PutData(&autoChooser);
+}
 
 struct PlayCommand : frc2::WaitCommand {
-  PlayCommand() : frc2::WaitCommand (1_s) {}
-  void Initialize() override {
+  PlayCommand(DriveTrain & dr) : frc2::WaitCommand (15_s) {
+    AddRequirements(&dr);
+  }
+  void Execute() override {
     DriveTrain::PlayMusic();
   }
 };
@@ -113,7 +115,7 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
     AutoDrive(drivetrain, -13_ft, 0_ft, .3)
     );
   case 4:
-   return new PlayCommand;
+   return new PlayCommand(drivetrain);
   }
   return &m_autonomousCommand;
 }
