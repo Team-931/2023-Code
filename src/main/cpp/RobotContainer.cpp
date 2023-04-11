@@ -41,7 +41,7 @@ struct PlayCommand : frc2::WaitCommand {
   void Initialize() override {
     DriveTrain::PlayMusic();
   }
-}
+};
 
 # include "armVectors.inc"
 
