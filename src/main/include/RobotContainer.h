@@ -82,7 +82,8 @@ struct DrvbyStick
     bool RunsWhenDisabled() const override {return true;}
     Arm& it;
     frc::XboxController& joy;
-    bool setPos{false};
+    bool setPos{false},
+         estopped {false} ;
   } turretbyStick{arm, operatorstick};
 
   struct IntbyStick

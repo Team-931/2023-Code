@@ -211,14 +211,19 @@ void RobotContainer::DrvbyStick::Execute() {
 }
 
 void RobotContainer::TurbyStick::Execute() {
-  if (frc::DriverStation::IsDisabled()) {
+  if (frc::DriverStation::IsDisabled() || estopped) {
     setPos = false;
     it.SetMotors(0, 0, 0);
+    return;
+  }
+  if (joy.GetRawButton(estop)) {
+    estopped = true;
     return;
   }
   if (joy.GetAButton()) {
     it.SetAngles(openInFront);
     setPos = true;
+    return;
   }
   if (joy.GetRightBumper()) {
     it.SetAngles(foldedDown);
@@ -255,29 +260,7 @@ void RobotContainer::TurbyStick::Execute() {
       setPos = true;
     }
   }
-  /* if (joy.GetYButton() && joy.GetRightBumper()) {
-    it.SetAngles(coneOnFloor);
-    setPos = true;
-  }
-  if (joy.GetYButton() && joy.GetLeftBumper()) {
-    it.SetAngles(cubeOnFloor);
-    setPos = true;
-  }
- */
   double y = joy.GetRightY();
-    /*  x /= 10; y /= 10;
-    if (joy.GetXButton()){
-      it.SetVeloc(x, 0, 0);
-      setPos = false;
-    }
-    else if (joy.GetYButton()){
-      it.SetVeloc(0, x, 0);
-      setPos = false;
-    }
-    else if (joy.GetBButton()){
-      it.SetVeloc(0, 0, x);
-      setPos = false;
-    } */
     if (abs(y) >= stickError) {
       it.HoldStill(-y * .02 /*ms*/ * 40 / (2 * pi * len3));
       setPos = true;

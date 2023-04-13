@@ -1,3 +1,16 @@
+constexpr int lowPostBtn = 2,
+              fronthighscore = 1,
+              frontfloorcube = 8,
+              fontfloorcone = 5,
+              backhighscore = 12,
+              backmidscore  = 11,
+              backfloorcube = 10,
+              substation = 3,
+              stowarm = 9,
+              estop = 6,
+              freearm = 7,
+              chule = 4;
+
 constexpr double lowPost[] = {21, 46, 111}, 
                  lowPostBack[] = {-95, 300, 37},
                  lowCubeBack[] = {-81, 286, 56},
@@ -37,4 +50,4 @@ constexpr const double (&makeAngles(double fwdIn, double htIn, double ang3,
         return {360*s1, 360*(theta2 - s1), ang3};
 }
 
-double const foo[] = {makeAngles(len1,ht-len2,0)[0], makeAngles(len1,ht-len2,0)[1]};
+//double const foo[] = {makeAngles(len1,ht-len2,0)[0], makeAngles(len1,ht-len2,0)[1]};
