@@ -9,7 +9,7 @@ constexpr int lowPostBtn = 2,
               stowarm = 9,
               estop = 6,
               freearm = 7,
-              chule = 4;
+              chute = 4;
 
 constexpr double lowPost[] = {21, 46, 111}, 
                  lowPostBack[] = {-95, 300, 37},
