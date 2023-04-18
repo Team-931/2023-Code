@@ -1,7 +1,10 @@
 // This will store functionalities for the turret on the bot
 #include <ctre/Phoenix.h>
 #pragma once
-
+void makeAngles(double fwdIn, double htIn,
+                        double (&output)[3],  
+                        bool reverseElbow = false);
+double forwardDist(const double (&angles)[3]);
 #include <frc2/command/SubsystemBase.h>
 
 class Arm : public frc2::SubsystemBase {
@@ -15,6 +18,7 @@ class Arm : public frc2::SubsystemBase {
 
   void SetAngles(double stage1Degrees, double stage2Degrees, double stage3Degrees); // 0, 0 is start position
   void SetAngles(const double (&angles)[3]); 
+  void GetAngles(double (&angles)[3]);//over-writes the angles array
   bool AtSetpoint(const double (&angles)[3]);
   void SetVeloc(double stage1RotPerSec, double stage2RotPerSec, double stage3RotPerSec); 
   void SetLinVeloc(double fwdInPerSec, double upInPerSec, double stage3DegreesPerSec);

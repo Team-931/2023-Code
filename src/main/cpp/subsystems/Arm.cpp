@@ -66,16 +66,15 @@ void Arm::Periodic() {
   /* frc::SmartDashboard::PutNumber("shooterSpeed(actual)",
                                  stage2.GetSelectedSensorVelocity());
    */
-  double theta1=stage1.GetSelectedSensorPosition() * 360 / ticksPerRotation / gear1to2;
-  double theta2=stage2.GetSelectedSensorPosition() * 360 / ticksPerRotation;
-  double theta3=stage3.GetSelectedSensorPosition() * 360 / ticksPerRotation;
-  double s1 = theta1, s2 = theta2 - s1, s3 = theta3 - s2;
-  frc::SmartDashboard::PutNumber("theta1", theta1);
-  frc::SmartDashboard::PutNumber("theta2", theta2);
-  frc::SmartDashboard::PutNumber("theta3", theta3);
-  frc::SmartDashboard::PutNumber("s1", s1);
-  frc::SmartDashboard::PutNumber("s2", s2);
-  frc::SmartDashboard::PutNumber("s3", s3);
+  static int iters = 0;
+  if(iters < 5) ++iters;
+  else {
+      double angles[3];
+      GetAngles(angles);
+      frc::SmartDashboard::PutNumber("s1", angles[0]);
+      frc::SmartDashboard::PutNumber("s2", angles[1]);
+      frc::SmartDashboard::PutNumber("s3", angles[2]);
+  }
 }
 
 void Arm::SetAngles(double deg1, double deg2, double deg3) {
@@ -96,6 +95,16 @@ void Arm::SetAngles(double deg1, double deg2, double deg3) {
 
 void Arm::SetAngles(const double (&angles)[3]) {
   SetAngles(angles[0], angles[1], angles[2]);
+}
+
+void Arm::GetAngles(double (&angles)[3]) {
+  double theta1=stage1.GetSelectedSensorPosition() * 360 / ticksPerRotation / gear1to2;
+  double theta2=stage2.GetSelectedSensorPosition() * 360 / ticksPerRotation;
+  double theta3=stage3.GetSelectedSensorPosition() * 360 / ticksPerRotation;
+  double s1 = theta1, s2 = theta2 - s1, s3 = theta3 - s2;
+  angles[0] = s1;
+  angles[1] = s2;
+  angles[2] = s3;  
 }
 
 bool Arm::AtSetpoint(const double (&angles)[3]) {

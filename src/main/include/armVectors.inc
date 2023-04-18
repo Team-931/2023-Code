@@ -34,8 +34,9 @@ constexpr double lowPost[] = {21, 46, 111},
 
 using Constants::Arm::ht, Constants::Arm::len1, Constants::Arm::len2, Constants::Arm::len3;
 using Constants::pi;
-constexpr const double (&makeAngles(double fwdIn, double htIn, double ang3, 
-                        bool reverseElbow = false))[3] {
+void makeAngles(double fwdIn, double htIn,
+                        double (&output)[3],  
+                        bool reverseElbow) {
         htIn -= ht;
         double cos2 = ((len1*len1 + len2*len2) - (htIn*htIn + fwdIn*fwdIn))/(2*len1*len2),
                theta2 = acos(cos2),
@@ -47,7 +48,11 @@ constexpr const double (&makeAngles(double fwdIn, double htIn, double ang3,
         };
         double h0 = cos2 - len1/len2, 
                 s1 = atan2(h0*htIn+sin2*fwdIn,sin2*htIn-h0*fwdIn) / (2*pi);
-        return {360*s1, 360*(theta2 - s1), ang3};
+        output[0] = 360 * s1;
+        output[1] = 360 * (theta2 - s1);
 }
 
+double forwardDist(const double (&angles)[3]) {
+       return len1 * sin (angles[0]) + len2 * sin(angles[1]);
+}
 //double const foo[] = {makeAngles(len1,ht-len2,0)[0], makeAngles(len1,ht-len2,0)[1]};
