@@ -220,30 +220,55 @@ void RobotContainer::TurbyStick::Execute() {
     estopped = true;
     return;
   }
-  if (joy.GetAButton()) {
-    it.SetAngles(openInFront);
+  if (joy.GetRawButton()) {
+    it.SetAngles();
     setPos = true;
     return;
   }
-  if (joy.GetRightBumper()) {
+  if (joy.GetRawButton(stowarm)) {
     it.SetAngles(foldedDown);
     setPos = true;
   }
-  if (joy.GetLeftBumper()) {
+  if (joy.GetRawButton(frontfloorcube)) {
     it.SetAngles(cubeOnFloor);
     setPos = true;
   }
-  if (joy.GetYButton()) {
+  if (joy.GetRawButton(fronthighscore)) {
     it.SetAngles(highPost);
     setPos = true;
   }
-  if (joy.GetXButton()) {
+  if (joy.GetRawButton(lowPostBtn)) {
     it.SetAngles(lowPost);
     setPos = true;
   }
-  if (joy.GetBButton()) {
+  if (joy.GetRawButton(substation)) {
     it.SetAngles(conePickup1);
     setPos = true;
+  }
+  if (joy.GetRawButton()) {
+    it.SetAngles();
+    setPos = true;
+    return;
+  }
+  if (joy.GetRawButton()) {
+    it.SetAngles();
+    setPos = true;
+    return;
+  }
+  if (joy.GetRawButton()) {
+    it.SetAngles();
+    setPos = true;
+    return;
+  }
+  if (joy.GetRawButton()) {
+    it.SetAngles();
+    setPos = true;
+    return;
+  }
+  if (joy.GetRawButton()) {
+    it.SetAngles();
+    setPos = true;
+    return;
   }
   {
     int pov = joy.GetPOV();
