@@ -1,7 +1,7 @@
 constexpr int lowPostBtn = 2,
               fronthighscore = 1,
               frontfloorcube = 8,
-              fontfloorcone = 5,
+              frontfloorcone = 5,
               backhighscore = 12,
               backmidscore  = 11,
               backfloorcube = 10,
@@ -30,7 +30,8 @@ constexpr double lowPost[] = {21, 46, 111},
                  coneOnFloorBack1[] = {-35, 282, 55},
                  coneOnFloorBack2[] = {-32, 275, 57},
                  cubeOnFloorBack[] = {-50, 244, 43},
-                 cubeOnFloor[] = {-11.5, 120, 95};
+                 cubeOnFloor[] = {-11.5, 120, 95},
+                 chuteAngles[] = {0,0,0};
 
 using Constants::Arm::ht, Constants::Arm::len1, Constants::Arm::len2, Constants::Arm::len3;
 using Constants::pi;

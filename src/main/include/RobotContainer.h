@@ -80,10 +80,12 @@ struct DrvbyStick
           }
     void Execute() override; 
     bool RunsWhenDisabled() const override {return true;}
+    void AngleOrIntermediate(const double (&angles)[3], bool shouldBeInBack);
     Arm& it;
     frc::XboxController& joy;
     bool setPos{false},
-         estopped {false} ;
+         estopped {false},
+         inBack {false};
   } turretbyStick{arm, operatorstick};
 
   struct IntbyStick

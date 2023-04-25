@@ -220,78 +220,69 @@ void RobotContainer::TurbyStick::Execute() {
     estopped = true;
     return;
   }
-  if (joy.GetRawButton()) {
-    it.SetAngles();
+  if (joy.GetRawButton(frontfloorcone)) {
+    AngleOrIntermediate(coneOnFloor, false);
     setPos = true;
     return;
   }
   if (joy.GetRawButton(stowarm)) {
-    it.SetAngles(foldedDown);
+    AngleOrIntermediate(foldedDown, false);
     setPos = true;
+    return;
   }
   if (joy.GetRawButton(frontfloorcube)) {
-    it.SetAngles(cubeOnFloor);
+    AngleOrIntermediate(cubeOnFloor, false);
     setPos = true;
+    return;
   }
   if (joy.GetRawButton(fronthighscore)) {
-    it.SetAngles(highPost);
+    AngleOrIntermediate(highPost, false);
     setPos = true;
+    return;
   }
   if (joy.GetRawButton(lowPostBtn)) {
-    it.SetAngles(lowPost);
+    AngleOrIntermediate(lowPost, false);
     setPos = true;
+    return;
   }
   if (joy.GetRawButton(substation)) {
-    it.SetAngles(conePickup1);
-    setPos = true;
-  }
-  if (joy.GetRawButton()) {
-    it.SetAngles();
+    AngleOrIntermediate(conePickup1, false);
     setPos = true;
     return;
   }
-  if (joy.GetRawButton()) {
-    it.SetAngles();
+  if (joy.GetRawButton(backfloorcube)) {
+    AngleOrIntermediate(cubeOnFloorBack, true);
     setPos = true;
     return;
   }
-  if (joy.GetRawButton()) {
-    it.SetAngles();
+  if (joy.GetRawButton(backmidscore)) {
+    AngleOrIntermediate(lowPostBack, true);
     setPos = true;
     return;
   }
-  if (joy.GetRawButton()) {
-    it.SetAngles();
+  if (joy.GetRawButton(backhighscore)) {
+    AngleOrIntermediate(highCubeBack, true);
     setPos = true;
     return;
   }
-  if (joy.GetRawButton()) {
-    it.SetAngles();
+/*  if (joy.GetRawButton(chute)) {
+    AngleOrIntermediate(chuteAngles, true);
     setPos = true;
     return;
   }
-  {
-    int pov = joy.GetPOV();
-    if (pov == 180) {
-      it.SetAngles(openInBack);
-      setPos = true;
-    }
-    if (pov == 90) {
-      it.SetAngles(lowPostBack);
-      setPos = true;
-    }
-    if (pov == 270) {
-      it.SetAngles(coneOnFloorBack1);
-      setPos = true;
-    }
+  if (joy.GetRawButton(freearm)) {
+    AngleOrIntermediate();
+    setPos = true;
+    return;
   }
-  double y = joy.GetRightY();
-    if (abs(y) >= stickError) {
-      it.HoldStill(-y * .02 /*ms*/ * 40 / (2 * pi * len3));
-      setPos = true;
-    }
-    else if (setPos == false) {
+ */  if (setPos == false) {
       it.HoldStill();
       setPos = true;
     }
  }
+
+void RobotContainer::TurbyStick::AngleOrIntermediate(const double (&angles)[3], bool shouldBeInBack) {
+  if (it.AtSetpoint(openInBack)) inBack = shouldBeInBack;
+  if (inBack == shouldBeInBack) it.SetAngles(angles);
+  else it.SetAngles(openInBack);
+}
