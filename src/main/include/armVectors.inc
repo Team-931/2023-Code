@@ -31,7 +31,7 @@ constexpr double lowPost[] = {21, 46, 111},
                  coneOnFloorBack2[] = {-32, 275, 57},
                  cubeOnFloorBack[] = {-50, 244, 43},
                  cubeOnFloor[] = {-11.5, 120, 95},
-                 chuteAngles[] = {0,0,0};
+                 chuteAngles[] = {-17,111,228};
 
 using Constants::Arm::ht, Constants::Arm::len1, Constants::Arm::len2, Constants::Arm::len3;
 using Constants::pi;
@@ -45,7 +45,7 @@ void makeAngles(double fwdIn, double htIn,
         theta2 /= (2*pi);
         if (reverseElbow) {
                sin2 = - sin2;
-               theta2 += .5; 
+               theta2 = 1 - theta2; 
         };
         double h0 = cos2 - len1/len2, 
                 s1 = atan2(h0*htIn+sin2*fwdIn,sin2*htIn-h0*fwdIn) / (2*pi);

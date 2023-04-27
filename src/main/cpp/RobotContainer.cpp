@@ -265,11 +265,11 @@ void RobotContainer::TurbyStick::Execute() {
     setPos = true;
     return;
   }
-/*  if (joy.GetRawButton(chute)) {
+  if (joy.GetRawButton(chute)) {
     AngleOrIntermediate(chuteAngles, true);
     setPos = true;
     return;
-  }
+  }/*
   if (joy.GetRawButton(freearm)) {
     AngleOrIntermediate();
     setPos = true;
