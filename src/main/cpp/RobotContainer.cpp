@@ -266,16 +266,22 @@ void RobotContainer::TurbyStick::Execute() {
     return;
   }
   if (joy.GetRawButton(chute)) {
-    AngleOrIntermediate(chuteAngles, true);
-    setPos = true;
-    return;
-  }/*
-  if (joy.GetRawButton(freearm)) {
-    AngleOrIntermediate();
+    AngleOrIntermediate(chuteAngles, false);
     setPos = true;
     return;
   }
- */  if (setPos == false) {
+  if (joy.GetRawButton(freearm)) {
+    double angles[3];
+    it.GetAngles(angles);
+    double fwdIn = forwardDist(angles);
+    makeAngles(fwdIn, 54, angles, elbowReversed(angles));
+    if (std::isnan (angles[0]) )
+      asHighAsItGets(fwdIn, angles);
+    it.SetAngles(angles);
+    setPos = true;
+    return;
+  }
+  if (setPos == false) {
       it.HoldStill();
       setPos = true;
     }

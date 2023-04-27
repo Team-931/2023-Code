@@ -53,7 +53,19 @@ void makeAngles(double fwdIn, double htIn,
         output[1] = 360 * (theta2 - s1);
 }
 
-double forwardDist(const double (&angles)[3]) {
-       return len1 * sin (angles[0]) + len2 * sin(angles[1]);
+void asHighAsItGets(double fwdIn, double (&output)[3]) {
+       double s1 = asin(fwdIn / (len1 + len2)) * 360 / (2*pi);
+       s1 = std::signbit(s1) * 180 - s1;
+       output[0] = s1; 
+       output[1] = 180 - s1;
 }
+
+double forwardDist(const double (&angles)[3]) {
+       return len1 * sin (angles[0] / 180 * pi) + len2 * sin(angles[1] / 180 * pi);
+}
+
+bool elbowReversed(const double (&angles)[3]) {
+       return angles[0] + angles[1] > 180;
+}
+
 //double const foo[] = {makeAngles(len1,ht-len2,0)[0], makeAngles(len1,ht-len2,0)[1]};

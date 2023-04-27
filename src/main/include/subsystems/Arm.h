@@ -4,7 +4,9 @@
 void makeAngles(double fwdIn, double htIn,
                         double (&output)[3],  
                         bool reverseElbow = false);
+void asHighAsItGets(double fwdIn, double (&output)[3]);
 double forwardDist(const double (&angles)[3]);
+bool elbowReversed(const double (&angles)[3]);
 #include <frc2/command/SubsystemBase.h>
 
 class Arm : public frc2::SubsystemBase {
