@@ -48,7 +48,7 @@ void makeAngles(double fwdIn, double htIn,
                theta2 = 1 - theta2; 
         };
         double h0 = cos2 - len1/len2, 
-                s1 = atan2(h0*htIn+sin2*fwdIn,sin2*htIn-h0*fwdIn) / (2*pi);
+                s1 = atan2(sin2*htIn-h0*fwdIn, h0*htIn+sin2*fwdIn) / (2*pi);
         output[0] = 360 * s1;
         output[1] = 360 * (theta2 - s1);
 }

@@ -271,14 +271,23 @@ void RobotContainer::TurbyStick::Execute() {
     return;
   }
   if (joy.GetRawButton(freearm)) {
-    double angles[3];
-    it.GetAngles(angles);
+    static double angles[3] = {foldedDown[0], foldedDown[1], foldedDown[2]};
+    if(setPos) it.GetAngles(angles);
+#ifdef straightup    
     double fwdIn = forwardDist(angles);
     makeAngles(fwdIn, 54, angles, elbowReversed(angles));
     if (std::isnan (angles[0]) )
       asHighAsItGets(fwdIn, angles);
     it.SetAngles(angles);
     setPos = true;
+#else
+    constexpr double vel = 2 /*in/sec*/ + .020 /*period:sec*/;
+    double adjustedVel = vel / sin(angles[0] + angles[1]);
+    angles[0] += adjustedVel * cos(angles[1]) / len1;
+    angles[1] -= adjustedVel * cos(angles[0]) / len2;
+    it.SetAngles(angles);
+    setPos = false;
+#endif
     return;
   }
   if (setPos == false) {
