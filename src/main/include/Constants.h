@@ -52,7 +52,7 @@ namespace Constants {
             ticksPerRotation = turnGearing * 2048,
             velPerRPS = ticksPerRotation / 10, // velocity per rotation/sec = accel per rotation/sec^2
             ticksPerRadian = ticksPerRotation / 2 / pi;  // todo: check this with hardware
-        constexpr int absSubtraction[]{2220, 2148, 2695, 1023}; // to align the wheels
+        constexpr int absSubtraction[]{2220, 2148, 522, 2000}; // to align the wheels
         constexpr double perSecond = 4, // inversely proportional to the intended response time
                          maxVel = perSecond * velPerRPS,
                          maxAccel = perSecond * perSecond * velPerRPS; // for Motion Magic
