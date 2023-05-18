@@ -11,6 +11,7 @@
 using namespace Constants::RobotContainer;
 
 #include "commands/AutoDrive.h"
+# define leapup
 
 RobotContainer::RobotContainer()
     : m_autonomousCommand(&intake), drivebyStick(drivetrain, *this) {
@@ -271,21 +272,37 @@ void RobotContainer::TurbyStick::Execute() {
     return;
   }
   if (joy.GetRawButton(freearm)) {
-    static double angles[3] = {foldedDown[0], foldedDown[1], foldedDown[2]};
-    if(setPos) it.GetAngles(angles);
-#ifdef straightup    
+#ifdef leapup    
+    double angles[3];
+    it.GetAngles(angles);
     double fwdIn = forwardDist(angles);
     makeAngles(fwdIn, 54, angles, elbowReversed(angles));
     if (std::isnan (angles[0]) )
       asHighAsItGets(fwdIn, angles);
     it.SetAngles(angles);
     setPos = true;
-#else
+#elif #defined(creepup)
+    static double angles[3] = {foldedDown[0], foldedDown[1], foldedDown[2]};
+    if(setPos) it.GetAngles(angles);
     constexpr double vel = 2 /*in/sec*/ + .020 /*period:sec*/;
     double adjustedVel = vel / sin(angles[0] + angles[1]);
     angles[0] += adjustedVel * cos(angles[1]) / len1;
     angles[1] -= adjustedVel * cos(angles[0]) / len2;
     it.SetAngles(angles);
+    setPos = false;
+# elif 0
+    double angles[3];
+    it.GetAngles(angles);
+    constexpr double vel = 2 /*in/sec*/ + .020 /*period:sec*/;
+    double adjustedVel = vel / sin(angles[0] + angles[1]);
+    it.SetVeloc(
+      adjustedVel * cos(angles[1]) / len1, 
+      -adjustedVel * cos(angles[0]) / len2,
+      0
+    );
+    setPos = false;
+#else
+    it.SetVeloc(0,-.1,0);
     setPos = false;
 #endif
     return;
